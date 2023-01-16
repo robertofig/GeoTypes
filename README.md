@@ -9,9 +9,7 @@ The data types available currently are:
 * [Shapefile](src/geotypes-shp.h): full read and write support.
 * [WKB](src/geotypes-wkb.h): full read and write support.
 
-The reason for this library, when other libraries for reading and manipulating GIS are available, is to provide a lightweight and straightforward way of adding such capabilities to C++ code.
-
-No dependency hell, no hidden memory allocation, no exception handling - just add the desired header file to the project and start using it.
+The reason for this library, when other libraries for reading and manipulating GIS are available, is to provide a lightweight and straightforward way of adding such capabilities to C++ code. No dependency hell, no hidden memory allocation, no exception handling - just add the desired header file to the project and start using it.
 
 ## How to use?
 
