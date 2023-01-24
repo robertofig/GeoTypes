@@ -9,4 +9,5 @@ pushd ..\build
 call cl ..\tests\test-base.cpp %CompileOptions% /I %TinyBasePath% /I ..\src %DebugBuild% /link /INCREMENTAL:NO
 call cl ..\tests\test-wkb.cpp %CompileOptions% /I %TinyBasePath% /I ..\src %DebugBuild% /link /INCREMENTAL:NO
 call cl ..\tests\test-shp.cpp %CompileOptions% /I %TinyBasePath% /I ..\src %DebugBuild% /link /INCREMENTAL:NO
+del *.exp *.ilk *.obj
 popd

@@ -10,7 +10,7 @@ bool Error = false;
 do { \
 if (!Test##Callback(__VA_ARGS__)) { \
 Error = true; \
-printf(" [%3d] %-40s ERRO.\n", __LINE__, #Callback##"()"); } \
+printf(" [%3d] %-40s ERROR.\n", __LINE__, #Callback##"()"); } \
 } while (0); \
 
 struct file_read
