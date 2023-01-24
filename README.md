@@ -9,9 +9,7 @@ The data types available currently are:
 * [Shapefile](src/geotypes-shp.h): full read and write support.
 * [WKB](src/geotypes-wkb.h): full read and write support.
 
-The reason for this library, when other libraries for reading and manipulating GIS are available, is to provide a lightweight and straightforward way of adding such capabilities to C++ code.
-
-No dependency hell, no hidden memory allocation, no exception handling - just add the desired header file to the project and start using it.
+The reason for this library, when other libraries for reading and manipulating GIS are available, is to provide a lightweight and straightforward way of adding such capabilities to C++ code. No dependency hell, no hidden memory allocation, no exception handling - just add the desired header file to the project and start using it.
 
 ## How to use?
 
@@ -27,9 +25,9 @@ This library currently builds on top of [TinyBase](https://github.com/robertofig
 
 ## Tests
 
-Unit tests are provided in the /tests/ subfolder for most functionalities in the libraries, though they need expanding. The sub-folder /tests/data/ provide sample files for supporting the tests.
+Unit tests are provided in the /tests subfolder for most functionalities in the libraries, though they need expanding. The sub-folder /tests/data provide sample files for supporting the tests.
 
-To build the tests, edit the `build.bat` file located in /tests/ and add the path to the TinyBase library, then run. A /build/ folder will be created (if not already), and the test executables will be placed there, along with debug symbols.
+To build the tests, edit the `build.bat` file located in /tests and add the path to the TinyBase library, then run. A /build folder will be created (if not already), and the test executables will be placed there, along with debug symbols.
 
 ## License
 

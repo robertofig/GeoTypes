@@ -158,6 +158,7 @@ external shapefile CreatePolygonZM(void* ShpPtr, void* ShxPtr, void* DbfPtr);
 external shapefile CreateMultiPatch(void* ShpPtr, void* ShxPtr, void* DbfPtr);
 
 external bool CreateField(shapefile* Shape, char* FieldName, u8 FieldLen, u8 Precision, shp_field_type Type);
+
 /* Creates a new field descriptor for the shapefile. [FieldName] must be zero-terminated
  |  and 11 bytes or fewer in length. [FieldLen] is how many bytes to reserve for data type
 |  String, or how many digits to reserve for Integer and Real (Boolean and Date are not
@@ -191,20 +192,23 @@ external shp_feature AddFeature(shapefile* Shape, i32 NumParts, i32 NumPoints);
 
 external bool AddPoint(shp_feature* Feat, v2 Vertex, f64 Z, f64 M);
 
-/* Adds a new point for ShpType_Point(ZM) geometries. Call only once. */
+/* Adds a new point for ShpType_Point(ZM) geometries. Call only once.
+ |--- Return: true if successful, false otherwise. */
 
 external bool AddPoints(shp_feature* Feat, i32 NumPoints, v2* Vertex, f64* Z, f64* M, i32 Offset);
 
 /* Adds [NumPoints] points for ShpType_MultiPoint(ZM) geometries. [Vertex] is a pointer
 |  to the first XY coords, likewise for [Z] and [M] (ignored if geom type does not have
 |  them). [Offset] gives the offset in bytes between two points, and applies to [Vertex],
- |  [Z] and [M] alike. */
+ |  [Z] and [M] alike.
+|--- Return: true if successful, false otherwise. */
 
 external bool AddLinestring(shp_feature* Feat, i32 NumPoints, v2* Vertex, f64* Z, f64* M, i32 Offset);
 
 /* Adds a linestring of [NumPoints] vertices for ShpType_Polyline(ZM) geometries. Call
  |  this function for each linestring in the feature. The working of [Vertex], [Z], [M]
-|  and [Offset] are the same as in AddPoints(). */
+|  and [Offset] are the same as in AddPoints().
+|--- Return: true if successful, false otherwise. */
 
 external bool AddRing(shp_feature* Feat, shp_ring_type Type, i32 NumPoints, v2* Vertex, f64* Z, f64* M, i32 Offset);
 
@@ -212,19 +216,26 @@ external bool AddRing(shp_feature* Feat, shp_ring_type Type, i32 NumPoints, v2* 
 |  function for each ring in case the polygon has holes, differentiating outer ring
  |  from inner hole with [Type]. Call this function for each ring of each polygon in
 |  the feature. The working of [Vertex], [Z], [M] and [Offset] are the same as in
- |  AddPoints(). */
+ |  AddPoints().
+|--- Return: true if successful, false otherwise. */
 
 external bool AddPatch(shp_feature* Feat, shp_patch_type Type, i32 NumPoints, v2* Vertex, f64* Z, f64* M, i32 Offset);
 
 /* Adds a patch of [NumPoints] vertices for ShpType_Multipatch geometries. Call this
 |  function for each patch in the feature. [Type] determines the type of the patch.
- |  The working of [Vertex], [Z], [M] and [Offset] are the same as in AddPoints(). */
+ |  The working of [Vertex], [Z], [M] and [Offset] are the same as in AddPoints().
+|--- Return: true if successful, false otherwise. */
 
 external bool AddAttrString(shp_feature* Feat, char* String, usz StringSize, i32 FieldIdx);
 external bool AddAttrInteger(shp_feature* Feat, isz Integer, i32 FieldIdx);
 external bool AddAttrReal(shp_feature* Feat, f64 Real, i32 FieldIdx);
 external bool AddAttrBoolean(shp_feature* Feat, bool Boolean, i32 FieldIdx);
 external bool AddAttrDate(shp_feature* Feat, usz Year, usz Month, usz Day, i32 FieldIdx);
+
+/* Adds data do a field of a feature [Feat]. The field pointed to by [FieldIdx] must
+ |  have been previously created during layer setup. The field must be of the same
+|  type as the version of AddAttr(...) used, else the function fails.
+|--- Return: true if successful, false otherwise. */
 
 
 #if !defined(GEOTYPES_STATIC_LINKING)
