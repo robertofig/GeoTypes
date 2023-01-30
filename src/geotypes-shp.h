@@ -11,7 +11,7 @@
 // Reading:
 //   1. Load entire content of SHP, SHX and DBF files to memory.
 //   2. Call ImportShp() to create parsed shapefile object.
-//   3. Iterate through shapefile.NumFeatures with GetFeature().
+//   3. Iterate through NumFeatures with GetFeature().
 //   4. Read feature data with GetGeometry(), GetFieldByIdx/Name().
 //
 // Writing:
@@ -172,6 +172,7 @@ external bool CreateField(shapefile* Shape, char* FieldName, u8 FieldLen, u8 Pre
 //=================================
 
 external shapefile   ImportShp(void* ShpPtr, usz ShpSize, void* ShxPtr, usz ShxSize, void* DbfPtr, usz DbfSize);
+external shapefile   OpenAndImportShp(void* ShpFilePath); // ShpFilePath must be in the OS unicode encoding.
 external shp_feature GetFeature(shapefile* Shape, i32 TargetIdx); // Idx from 0..NumFeatures-1.
 external shp_part    GetGeometry(shp_feature Feat, i32 TargetIdx); // Idx from 0..NumParts-1.
 external shp_field   GetFieldByIdx(shp_feature Feat, i32 TargetIdx); // Idx from 0..NumFields.

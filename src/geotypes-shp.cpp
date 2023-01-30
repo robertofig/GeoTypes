@@ -484,6 +484,57 @@ ImportShp(void* ShpPtr, usz ShpSize, void* ShxPtr, usz ShxSize, void* DbfPtr, us
     return Result;
 }
 
+external shapefile
+OpenAndImportShp(void* ShpPathStr)
+{
+    shapefile Result = {0};
+    
+    path ShpPath = Path(ShpPathStr);
+    ShpPath.WriteCur = StringLen(ShpPath, LEN_CSTRING);
+    if (ShpPath.WriteCur > 0)
+    {
+        file ShpFile = OpenFileHandle(ShpPathStr, READ_SHARE);
+        usz ShpFileSize = FileSizeOf(ShpFile);
+        
+        char AccompanyFiles[MAX_PATH_SIZE] = {0};
+        path AccompanyPath = Path(AccompanyFiles);
+        AppendDataToPath(ShpPath.Base, ShpPath.WriteCur, &AccompanyPath);
+        usz ExtIdx = CharInString('.', AccompanyPath, RETURN_IDX_AFTER|SEARCH_REVERSE);
+        
+        AccompanyPath.WriteCur = ExtIdx;
+        AppendStringToString(StrLit("shx"), &AccompanyPath);
+        file ShxFile = OpenFileHandle(AccompanyFiles, READ_SHARE);
+        usz ShxFileSize = FileSizeOf(ShxFile);
+        
+        AccompanyPath.WriteCur = ExtIdx;
+        AppendStringToString(StrLit("dbf"), &AccompanyPath);
+        file DbfFile = OpenFileHandle(AccompanyFiles, READ_SHARE);
+        usz DbfFileSize = FileSizeOf(DbfFile);
+        
+        u8* Mem = NULL;
+        if (ShpFileSize > 0 && ShxFileSize > 0 && DbfFileSize > 0
+            && (Mem = (u8*)GetMemory(ShpFileSize + ShxFileSize + DbfFileSize, 0, MEM_READ|MEM_WRITE)))
+        {
+            u8* ShpPtr = Mem;
+            u8* ShxPtr = Mem + ShpFileSize;
+            u8* DbfPtr = ShxPtr + ShxFileSize;
+            
+            if (ReadFromFile(ShpFile, ShpPtr, ShpFileSize, 0)
+                && ReadFromFile(ShxFile, ShxPtr, ShxFileSize, 0)
+                && ReadFromFile(DbfFile, DbfPtr, DbfFileSize, 0))
+            {
+                Result = ImportShp(ShpPtr, ShpFileSize, ShxPtr, ShxFileSize, DbfPtr, DbfFileSize);
+            }
+        }
+        
+        CloseFileHandle(ShpFile);
+        CloseFileHandle(ShxFile);
+        CloseFileHandle(DbfFile);
+    }
+    
+    return Result;
+}
+
 internal shp_feature
 _ReadRecordInfo(u8* Record)
 {
