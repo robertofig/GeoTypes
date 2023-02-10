@@ -180,15 +180,21 @@ inline line2 Line2(f64 X0, f64 Y0, f64 X1, f64 Y1) { return Line2(V2(X0, Y0), V2
 f64 Dist(v2 P, line2 L); // Distance of [P] to closest point in [L].
 f64 Dist(line2 L, v2 P); // Same as above.
 
-f64 LocationAlongLine(line2 L, v2 Target); // Percentage between 0 and 1 where [Target] lies
-// along [L]. If [Target] does not lie over [L], it is projected over it (closest point).
-// Return value is not clamped, so < 0 means [Target] is before [L], and > 1 means it's after.
+f64 LocationAlongLine(line2 L, v2 Target);
 
-v2 PointAlongLine(line2 L, f64 LineLocation); // Given a [LineLocation] percentage between
-// 0 and 1 along [L], return point in it.
+/* Percentage between 0 and 1 where [Target] lies along [L]. If [Target] does not lie over [L],
+ |  it is projected over it (closest point). Return value is not clamped, so < 0 means [Target]
+ |  is before [L], and > 1 means it's after. */
 
-bool IsPointLeftOfLine(v2 P, line2 L); // Returns true if [P] is to the left of [L], and false
-// if not (including case where point is on the line).
+v2 PointAlongLine(line2 L, f64 LineLocation);
+
+/* Given a [LineLocation] percentage between 0 and 1 along [L], returns the point on it.
+|  Percentagens outside the [0,1] interval are clamped to it. */
+
+bool IsPointLeftOfLine(v2 P, line2 L);
+
+/* Returns true if [P] is to the left of [L], and false if not. Also returns false if point
+|  is on the line. */
 
 //==================================
 // Line 3D
@@ -205,12 +211,16 @@ inline line3 Line3(f64 X0, f64 Y0, f64 Z0, f64 X1, f64 Y1, f64 Z1) { return Line
 f64 Dist(v3 P, line3 L); // 3D distance of [P] to closest point in [L].
 f64 Dist(line3 L, v3 P); // Same as above.
 
-f64 LocationAlongLine(line3 L, v3 Target); // Percentage between 0 and 1 where [Target] lies
-// along [L]. If [Target] does not lie over [L], it is projected over it (closest point).
-// Return value is not clamped, so < 0 means [Target] is before [L], and > 1 means it's after.
+f64 LocationAlongLine(line3 L, v3 Target);
 
-v3  PointAlongLine(line3 L, f64 LineLocation); // Given a [LineLocation] percentage between
-// 0 and 1 along [L], return point in it.
+/* Percentage between 0 and 1 where [Target] lies along [L]. If [Target] does not lie over [L],
+ |  it is projected over it (closest point). Return value is not clamped, so < 0 means [Target]
+ |  is before [L], and > 1 means it's after. */
+
+v3 PointAlongLine(line3 L, f64 LineLocation);
+
+/* Given a [LineLocation] percentage between 0 and 1 along [L], returns the point on it.
+|  Percentagens outside the [0,1] interval are clamped to it. */
 
 
 #if !defined(GEOTYPES_STATIC_LINKING)
