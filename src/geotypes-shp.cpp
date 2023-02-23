@@ -690,7 +690,7 @@ GetGeometry(shp_feature Feat, i32 TargetIdx)
 internal shp_field
 _ReadFieldInfo(dbf_fd* FD, usz FieldOffset, u8* DbfRecord)
 {
-    shp_field Result = {0};
+    shp_field Result = {};
     
     Result.Name = FD->Name;
     for (char* Ptr = FD->Name; *Ptr && Ptr < &FD->Name[11]; Ptr++)
@@ -776,7 +776,7 @@ _GetFDByIdx(u8* Dbf, i32 TargetIdx)
 external shp_field
 GetFieldByIdx(shp_feature Feat, i32 TargetIdx)
 {
-    shp_field Result = {0};
+    shp_field Result = {};
     if (TargetIdx < Feat.Shape->NumFields)
     {
         target_fd Field = _GetFDByIdx(Feat.Shape->DbfFilePtr, TargetIdx);
@@ -788,7 +788,7 @@ GetFieldByIdx(shp_feature Feat, i32 TargetIdx)
 external shp_field
 GetFieldByName(shp_feature Feat, char* TargetName)
 {
-    shp_field Result = {0};
+    shp_field Result = {};
     
     dbf_header* Header = (dbf_header*)Feat.Shape->DbfFilePtr;
     dbf_fd* FD = (dbf_fd*)(Feat.Shape->DbfFilePtr + sizeof(dbf_header));
