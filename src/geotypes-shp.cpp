@@ -1205,7 +1205,6 @@ AddRing(shp_feature* Feat, shp_ring_type RingType, i32 NumPoints, v2* Vertex, f6
     v2* AnchorPoint = WritePtr;
     
     shp_bbox2 BBox = (Polygon->NumPoints > 0) ? Polygon->BBox : SHP_BBOX2_DEFAULT;
-    f64 YMin = DBL_MAX;
     for (i32 Count = 0; Count < NumPoints; Count++)
     {
         *WritePtr = *Vertex;
@@ -1214,14 +1213,11 @@ AddRing(shp_feature* Feat, shp_ring_type RingType, i32 NumPoints, v2* Vertex, f6
         BBox.YMin = Min(BBox.YMin, Vertex->Y);
         BBox.XMax = Max(BBox.XMax, Vertex->X);
         BBox.YMax = Max(BBox.YMax, Vertex->Y);
-        if (Vertex->Y <= YMin)
+        if (WritePtr->Y < AnchorPoint->Y
+            || (WritePtr->Y == AnchorPoint->Y
+                && WritePtr->X > AnchorPoint->X))
         {
-            YMin = Vertex->Y;
-            if (AnchorPoint->Y == WritePtr->Y
-                && AnchorPoint->X < WritePtr->X)
-            {
-                AnchorPoint = WritePtr;
-            }
+            AnchorPoint = WritePtr;
         }
         WritePtr++;
         Vertex = (v2*)((u8*)Vertex + Offset);
