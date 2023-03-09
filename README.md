@@ -21,7 +21,7 @@ Alternatively, one can build these into objects or static library, in which case
 
 ## Dependencies
 
-This library currently builds on top of [TinyBase](https://github.com/robertofig85/TinyBase). The `Base` and `WKB` modules make use of tinybase-types, and the `Shapefile` module makes use of tinybase-strings and tinybase-platform for generating necessary DBF info.
+This library currently builds on top of [TinyBase](https://github.com/robertofig/TinyBase). The `Base` and `WKB` modules make use of tinybase-types, and the `Shapefile` module makes use of tinybase-strings and tinybase-platform for generating necessary DBF info.
 
 ## Tests
 
