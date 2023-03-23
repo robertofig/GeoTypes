@@ -159,11 +159,13 @@ inline bbox2 BBox2(v2 Min, v2 Max) { bbox2 Result = { Min, Max }; return Result;
 inline bbox2 BBox2(f64 XMin, f64 YMin, f64 XMax, f64 YMax) { return BBox2(V2(XMin, YMin), V2(XMax, YMax)); }
 inline bbox2 BBox2(v2 Min, f64 Width, f64 Height) { return BBox2(Min, Min + V2(Width, Height)); }
 
-bool Intersect(bbox2 A, bbox2 B);  // Check if two bbox2 overlap.
-bool Intersect(v2 P, bbox2 B);     // Check if point is inside or on bbox2.
-bool Intersect(bbox2 B, v2 P);     // Same as above.
-bool Intersect(circle C, bbox2 B); // Check if circle and bbox2 overlap.
-bool Intersect(bbox2 B, circle C); // Same as above.
+f64   Area(bbox2 A);                 // Area of bbox2.
+bbox2 Merge(bbox2 A, bbox2 B);       // Creates new bbox2 from the mins and maxs of two bbox2.
+bool  Intersects(bbox2 A, bbox2 B);  // Check if two bbox2 overlap.
+bool  Intersects(v2 P, bbox2 B);     // Check if point is inside or on bbox2.
+bool  Intersects(bbox2 B, v2 P);     // Same as above.
+bool  Intersects(circle C, bbox2 B); // Check if circle and bbox2 overlap.
+bool  Intersects(bbox2 B, circle C); // Same as above.
 
 //==================================
 // Line 2D

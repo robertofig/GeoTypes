@@ -232,28 +232,43 @@ PointInCircle(v2 P, circle C)
 // BBox 2D
 //==================================
 
-bool
-Intersect(bbox2 A, bbox2 B)
+f64
+Area(bbox2 A)
 {
-    bool Result = !(A.Max.X < B.Min.X || A.Min.X > B.Max.X || A.Max.Y < B.Min.Y || A.Min.Y > B.Max.Y);
+    f64 Result = (A.Max.X - A.Min.X) * (A.Max.Y - A.Min.Y);
+    return Result;
+}
+
+bbox2
+Merge(bbox2 A, bbox2 B)
+{
+    bbox2 Result = BBox2(Min(A.Min.X, B.Min.X), Min(A.Min.Y, B.Min.Y),
+                         Max(A.Max.X, B.Max.X), Max(A.Max.Y, B.Max.Y));
     return Result;
 }
 
 bool
-Intersect(v2 P, bbox2 B)
+Intersects(bbox2 A, bbox2 B)
 {
-    bool Result = !(P.X < B.Min.X || P.X > B.Max.X || P.Y < B.Min.Y || P.Y > B.Max.Y);
+    bool Result = (A.Min.X <= B.Max.X && A.Max.X >= B.Min.X && A.Min.Y <= B.Max.Y && A.Max.Y >= B.Min.Y);
     return Result;
 }
 
 bool
-Intersect(bbox2 B, v2 P) 
+Intersects(v2 P, bbox2 B)
 {
-    return Intersect(P, B);
+    bool Result = (P.X <= B.Max.X && P.X >= B.Min.X && P.Y <= B.Max.Y && P.Y >= B.Min.Y);
+    return Result;
 }
 
 bool
-Intersect(circle C, bbox2 B)
+Intersects(bbox2 B, v2 P) 
+{
+    return Intersects(P, B);
+}
+
+bool
+Intersects(circle C, bbox2 B)
 {
     f64 NearestX = Max(B.Min.X, Min(C.Centre.X, B.Max.X));
     f64 NearestY = Max(B.Min.Y, Min(C.Centre.Y, B.Max.Y));
@@ -262,9 +277,9 @@ Intersect(circle C, bbox2 B)
 }
 
 bool
-Intersect(bbox2 B, circle C)
+Intersects(bbox2 B, circle C)
 {
-    return Intersect(C, B);
+    return Intersects(C, B);
 }
 
 //==================================
