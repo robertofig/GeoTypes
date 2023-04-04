@@ -200,17 +200,17 @@ bool TestCircle_PointInCircle(v2 P, circle C, bool Expected)
 
 bool TestBBox2_IntersectBBox2(bbox2 A, bbox2 B, bool Expected)
 {
-    return Intersect(A, B) == Expected;
+    return Intersects(A, B) == Expected;
 }
 
 bool TestBBox2_IntersectV2(bbox2 A, v2 B, bool Expected)
 {
-    return Intersect(A, B) == Expected;
+    return Intersects(A, B) == Expected;
 }
 
 bool TestBBox2_IntersectCircle(bbox2 A, circle B, bool Expected)
 {
-    return Within(Intersect(A, B), Expected);
+    return Within(Intersects(A, B), Expected);
 }
 
 //

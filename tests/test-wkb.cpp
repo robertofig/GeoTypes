@@ -319,6 +319,38 @@ bool TestIterGeometry4(void** List, usz Size)
     return Count == Size;
 }
 
+bool TestBBox(wkb_point2* Wkb, bbox2 Expected) { return GetBBox(Wkb) == Expected; }
+bool TestBBox(wkb_point3* Wkb, bbox3 Expected) { return GetBBox(Wkb) == Expected; }
+bool TestBBox(wkb_point4* Wkb, bbox4 Expected) { return GetBBox(Wkb) == Expected; }
+
+bool TestBBox(wkb_linestring2* Wkb, bbox2 Expected) { return GetBBox(Wkb) == Expected; }
+bool TestBBox(wkb_linestring3* Wkb, bbox3 Expected) { return GetBBox(Wkb) == Expected; }
+bool TestBBox(wkb_linestring4* Wkb, bbox4 Expected) { return GetBBox(Wkb) == Expected; }
+
+bool TestBBox(wkb_polygon2* Wkb, bbox2 Expected) { return GetBBox(Wkb) == Expected; }
+bool TestBBox(wkb_polygon3* Wkb, bbox3 Expected) { return GetBBox(Wkb) == Expected; }
+bool TestBBox(wkb_polygon4* Wkb, bbox4 Expected) { return GetBBox(Wkb) == Expected; }
+
+bool TestBBox(wkb_polyhedron2* Wkb, bbox2 Expected) { return GetBBox(Wkb) == Expected; }
+bool TestBBox(wkb_polyhedron3* Wkb, bbox3 Expected) { return GetBBox(Wkb) == Expected; }
+bool TestBBox(wkb_polyhedron4* Wkb, bbox4 Expected) { return GetBBox(Wkb) == Expected; }
+
+bool TestBBox(wkb_multipoint2* Wkb, bbox2 Expected) { return GetBBox(Wkb) == Expected; }
+bool TestBBox(wkb_multipoint3* Wkb, bbox3 Expected) { return GetBBox(Wkb) == Expected; }
+bool TestBBox(wkb_multipoint4* Wkb, bbox4 Expected) { return GetBBox(Wkb) == Expected; }
+
+bool TestBBox(wkb_multilinestring2* Wkb, bbox2 Expected) { return GetBBox(Wkb) == Expected; }
+bool TestBBox(wkb_multilinestring3* Wkb, bbox3 Expected) { return GetBBox(Wkb) == Expected; }
+bool TestBBox(wkb_multilinestring4* Wkb, bbox4 Expected) { return GetBBox(Wkb) == Expected; }
+
+bool TestBBox(wkb_multipolygon2* Wkb, bbox2 Expected) { return GetBBox(Wkb) == Expected; }
+bool TestBBox(wkb_multipolygon3* Wkb, bbox3 Expected) { return GetBBox(Wkb) == Expected; }
+bool TestBBox(wkb_multipolygon4* Wkb, bbox4 Expected) { return GetBBox(Wkb) == Expected; }
+
+bool TestBBox(wkb_collection2* Wkb, bbox2 Expected) { return GetBBox(Wkb) == Expected; }
+bool TestBBox(wkb_collection3* Wkb, bbox3 Expected) { return GetBBox(Wkb) == Expected; }
+bool TestBBox(wkb_collection4* Wkb, bbox4 Expected) { return GetBBox(Wkb) == Expected; }
+
 //
 // Test program
 //
@@ -332,15 +364,18 @@ int main()
     {
         wkb_point2* Point = CreatePoint(&Geom1, V2(17.9438374, -148.0000022001));
         Test(ReadPoint, LoadWkb(WkbPoint, Geom2), Point, sizeof(*Point));
+        Test(BBox, Point, BBox2(17.9438374, -148.0000022001, 17.9438374, -148.0000022001));
         
         wkb_point3* PointZ = CreatePointZ(&Geom1, V3(17.9438374, -148.0000022001, 40923.832));
         Test(ReadPoint, LoadWkb(WkbPointZ, Geom2), PointZ, sizeof(*PointZ));
+        Test(BBox, PointZ, BBox3(17.9438374, -148.0000022001, 40923.832, 17.9438374, -148.0000022001, 40923.832));
         
         wkb_point3* PointM = CreatePointM(&Geom1, V3(17.9438374, -148.0000022001, 0.0004));
         Test(ReadPoint, LoadWkb(WkbPointM, Geom2), PointM, sizeof(*PointM));
         
         wkb_point4* PointZM = CreatePointZM(&Geom1, V4(17.9438374, -148.0000022001, 40923.832, 0.0004));
         Test(ReadPoint, LoadWkb(WkbPointZM, Geom2), PointZM, sizeof(*PointZM));
+        Test(BBox, PointZM, BBox4(17.9438374, -148.0000022001, 40923.832, 0.0004, 17.9438374, -148.0000022001, 40923.832, 0.0004));
     }
     
     // WkbLinestring
@@ -353,6 +388,7 @@ int main()
         AddVertex(Linestring, V2(2, 2));
         LinestringSize = GetLinestringSize(Linestring);
         Test(ReadLinestring, LoadWkb(WkbLinestring, Geom2), Linestring, LinestringSize);
+        Test(BBox, Linestring, BBox2(1, 1, 2, 2));
         
         wkb_linestring3* LinestringZ = CreateLinestringZ(Geom1);
         AddVertex(LinestringZ, V3(1, 1, 3));
@@ -360,6 +396,7 @@ int main()
         AddVertex(LinestringZ, V3(2, 2, 3));
         LinestringSize = GetLinestringSize(LinestringZ);
         Test(ReadLinestring, LoadWkb(WkbLinestringZ, Geom2), LinestringZ, LinestringSize);
+        Test(BBox, LinestringZ, BBox3(1, 1, 3, 2, 2, 3));
         
         wkb_linestring3* LinestringM = CreateLinestringM(Geom1);
         AddVertex(LinestringM, V3(1, 1, 3));
@@ -374,6 +411,7 @@ int main()
         AddVertex(LinestringZM, V4(2, 2, 3, 4));
         LinestringSize = GetLinestringSize(LinestringZM);
         Test(ReadLinestring, LoadWkb(WkbLinestringZM, Geom2), LinestringZM, LinestringSize);
+        Test(BBox, LinestringZM, BBox4(1, 1, 3, 4, 2, 2, 3, 4));
     }
     
     // WkbPolygon
@@ -395,6 +433,7 @@ int main()
         }
         PolygonSize = GetPolygonSize(Polygon);
         Test(ReadPolygon, LoadWkb(WkbPolygon, Geom2), Polygon, PolygonSize);
+        Test(BBox, Polygon, BBox2(1, 1, 2, 2));
         
         wkb_polygon3* PolygonZ = CreatePolygonZ(Geom1);
         {
@@ -411,6 +450,7 @@ int main()
         }
         PolygonSize = GetPolygonSize(PolygonZ);
         Test(ReadPolygon, LoadWkb(WkbPolygonZ, Geom2), PolygonZ, PolygonSize);
+        Test(BBox, PolygonZ, BBox3(1, 1, 3, 2, 2, 3));
         
         wkb_polygon3* PolygonM = CreatePolygonM(Geom1);
         {
@@ -443,6 +483,7 @@ int main()
         }
         PolygonSize = GetPolygonSize(PolygonZM);
         Test(ReadPolygon, LoadWkb(WkbPolygonZM, Geom2), PolygonZM, PolygonSize);
+        Test(BBox, PolygonZM, BBox4(1, 1, 3, 4, 2, 2, 3, 4));
     }
     
     // WkbTriangle
@@ -521,6 +562,7 @@ int main()
         }
         PolyhedronSize = GetPolyhedronSize(Polyhedron);
         Test(ReadPolyhedron, LoadWkb(WkbPolyhedron, Geom2), Polyhedron, PolyhedronSize);
+        Test(BBox, Polyhedron, BBox2(0, 0, 1, 2));
         
         wkb_polyhedron3* PolyhedronZ = CreatePolyhedronZ(Geom1);
         {
@@ -581,6 +623,7 @@ int main()
         }
         PolyhedronSize = GetPolyhedronSize(PolyhedronZ);
         Test(ReadPolyhedron, LoadWkb(WkbPolyhedronZ, Geom2), PolyhedronZ, PolyhedronSize);
+        Test(BBox, PolyhedronZ, BBox3(0, 0, 0, 1, 1, 1));
         
         wkb_polyhedron3* PolyhedronM = CreatePolyhedronM(Geom1);
         {
@@ -701,6 +744,7 @@ int main()
         }
         PolyhedronSize = GetPolyhedronSize(PolyhedronZM);
         Test(ReadPolyhedron, LoadWkb(WkbPolyhedronZM, Geom2), PolyhedronZM, PolyhedronSize);
+        Test(BBox, PolyhedronZM, BBox4(0, 0, 0, 4, 1, 1, 1, 9));
     }
     
     // TIN
@@ -805,12 +849,14 @@ int main()
         AddPoint(MultiPoint, V2(5, 6));
         MultiPointSize = GetMultiPointSize(MultiPoint);
         Test(ReadMultiPoint, LoadWkb(WkbMultiPoint, Geom2), MultiPoint, MultiPointSize);
+        Test(BBox, MultiPoint, BBox2(1, 2, 5, 6));
         
         wkb_multipoint3* MultiPointZ = CreateMultiPointZ(Geom1);
         AddPoint(MultiPointZ, V3(1, 2, 3));
         AddPoint(MultiPointZ, V3(5, 6, 7));
         MultiPointSize = GetMultiPointSize(MultiPointZ);
         Test(ReadMultiPoint, LoadWkb(WkbMultiPointZ, Geom2), MultiPointZ, MultiPointSize);
+        Test(BBox, MultiPointZ, BBox3(1, 2, 3, 5, 6, 7));
         
         wkb_multipoint3* MultiPointM = CreateMultiPointM(Geom1);
         AddPoint(MultiPointM, V3(1, 2, 3));
@@ -823,6 +869,7 @@ int main()
         AddPoint(MultiPointZM, V4(5, 6, 7, 8));
         MultiPointSize = GetMultiPointSize(MultiPointZM);
         Test(ReadMultiPoint, LoadWkb(WkbMultiPointZM, Geom2), MultiPointZM, MultiPointSize);
+        Test(BBox, MultiPointZM, BBox4(1, 2, 3, 4, 5, 6, 7, 8));
     }
     
     // MultiLinestring
@@ -840,6 +887,7 @@ int main()
         }
         MultiLinestringSize = GetMultiLinestringSize(MultiLinestring);
         Test(ReadMultiLinestring, LoadWkb(WkbMultiLinestring, Geom2), MultiLinestring, MultiLinestringSize);
+        Test(BBox, MultiLinestring, BBox2(1, 2, 13, 14));
         
         wkb_multilinestring3* MultiLinestringZ = CreateMultiLinestringZ(Geom1);
         {
@@ -852,6 +900,7 @@ int main()
         }
         MultiLinestringSize = GetMultiLinestringSize(MultiLinestringZ);
         Test(ReadMultiLinestring, LoadWkb(WkbMultiLinestringZ, Geom2), MultiLinestringZ, MultiLinestringSize);
+        Test(BBox, MultiLinestringZ, BBox3(1, 2, 3, 13, 14, 15));
         
         wkb_multilinestring3* MultiLinestringM = CreateMultiLinestringM(Geom1);
         {
@@ -876,6 +925,7 @@ int main()
         }
         MultiLinestringSize = GetMultiLinestringSize(MultiLinestringZM);
         Test(ReadMultiLinestring, LoadWkb(WkbMultiLinestringZM, Geom2), MultiLinestringZM, MultiLinestringSize);
+        Test(BBox, MultiLinestringZM, BBox4(1, 2, 3, 4, 13, 14, 15, 16));
     }
     
     // MultiPolygon
@@ -913,6 +963,7 @@ int main()
         }
         MultiPolygonSize = GetMultiPolygonSize(MultiPolygon);
         Test(ReadMultiPolygon, LoadWkb(WkbMultiPolygon, Geom2), MultiPolygon, MultiPolygonSize);
+        Test(BBox, MultiPolygon, BBox2(-2, -2, 4, 4));
         
         wkb_multipolygon3* MultiPolygonZ = CreateMultiPolygonZ(Geom1);
         {
@@ -945,6 +996,7 @@ int main()
         }
         MultiPolygonSize = GetMultiPolygonSize(MultiPolygonZ);
         Test(ReadMultiPolygon, LoadWkb(WkbMultiPolygonZ, Geom2), MultiPolygonZ, MultiPolygonSize);
+        Test(BBox, MultiPolygonZ, BBox3(-2, -2, 0, 4, 4, 0));
         
         wkb_multipolygon3* MultiPolygonM = CreateMultiPolygonM(Geom1);
         {
@@ -1009,6 +1061,7 @@ int main()
         }
         MultiPolygonSize = GetMultiPolygonSize(MultiPolygonZM);
         Test(ReadMultiPolygon, LoadWkb(WkbMultiPolygonZM, Geom2), MultiPolygonZM, MultiPolygonSize);
+        Test(BBox, MultiPolygonZM, BBox4(-2, -2, 0, 1, 4, 4, 0, 14));
     }
     
     // Geometry Collection
@@ -1026,6 +1079,7 @@ int main()
         }
         CollectionSize = GetCollectionSize(Collection);
         Test(ReadCollection, LoadWkb(WkbCollection, Geom2), Collection, CollectionSize);
+        Test(BBox, Collection, BBox2(2, 3, 3, 4));
         
         wkb_collection3* CollectionZ = CreateCollectionZ(Geom1);
         {
@@ -1038,6 +1092,7 @@ int main()
         }
         CollectionSize = GetCollectionSize(CollectionZ);
         Test(ReadCollection, LoadWkb(WkbCollectionZ, Geom2), CollectionZ, CollectionSize);
+        Test(BBox, CollectionZ, BBox3(2, 3, 4, 3, 4, 9));
         
         wkb_collection3* CollectionM = CreateCollectionM(Geom1);
         {
@@ -1062,6 +1117,7 @@ int main()
         }
         CollectionSize = GetCollectionSize(CollectionZM);
         Test(ReadCollection, LoadWkb(WkbCollectionZM, Geom2), CollectionZM, CollectionSize);
+        Test(BBox, CollectionZM, BBox4(2, 3, 4, 10, 3, 4, 9, 12));
     }
     
     // Iter

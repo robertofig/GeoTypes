@@ -350,6 +350,27 @@ GetVertex(wkb_linestring4* Linestring, usz TargetIdx)
     return Points + TargetIdx;
 }
 
+inline v2*
+GetVertex(ring2* Ring, usz TargetIdx)
+{
+    v2* Points = (v2*)&Ring[1];
+    return Points + TargetIdx;
+}
+
+inline v3*
+GetVertex(ring3* Ring, usz TargetIdx)
+{
+    v3* Points = (v3*)&Ring[1];
+    return Points + TargetIdx;
+}
+
+inline v4*
+GetVertex(ring4* Ring, usz TargetIdx)
+{
+    v4* Points = (v4*)&Ring[1];
+    return Points + TargetIdx;
+}
+
 inline ring2*
 GetRing(wkb_polygon2* Polygon, usz TargetIdx)
 {
@@ -1014,11 +1035,116 @@ GetCollectionSize(wkb_collection4* Collection)
 // Iterate through members
 //=================================
 
+inline wkb_iter2
+WkbIter(wkb_polygon2* Polygon)
+{
+    wkb_iter2 Result = { 0, Polygon->NumRings, GetRing(Polygon, 0) };
+    return Result;
+}
+
+inline wkb_iter3
+WkbIter(wkb_polygon3* Polygon)
+{
+    wkb_iter3 Result = { 0, Polygon->NumRings, GetRing(Polygon, 0) };
+    return Result;
+}
+
+inline wkb_iter4
+WkbIter(wkb_polygon4* Polygon)
+{
+    wkb_iter4 Result = { 0, Polygon->NumRings, GetRing(Polygon, 0) };
+    return Result;
+}
+
+inline wkb_iter2
+WkbIter(wkb_multilinestring2* MultiLinestring)
+{
+    wkb_iter2 Result = { 0, MultiLinestring->NumLinestrings, GetLinestring(MultiLinestring, 0) };
+    return Result;
+}
+
+inline wkb_iter3
+WkbIter(wkb_multilinestring3* MultiLinestring)
+{
+    wkb_iter3 Result = { 0, MultiLinestring->NumLinestrings, GetLinestring(MultiLinestring, 0) };
+    return Result;
+}
+
+inline wkb_iter4
+WkbIter(wkb_multilinestring4* MultiLinestring)
+{
+    wkb_iter4 Result = { 0, MultiLinestring->NumLinestrings, GetLinestring(MultiLinestring, 0) };
+    return Result;
+}
+
+inline wkb_iter2
+WkbIter(wkb_multipolygon2* MultiPolygon)
+{
+    wkb_iter2 Result = { 0, MultiPolygon->NumPolygons, GetPolygon(MultiPolygon, 0) };
+    return Result;
+}
+
+inline wkb_iter3
+WkbIter(wkb_multipolygon3* MultiPolygon)
+{
+    wkb_iter3 Result = { 0, MultiPolygon->NumPolygons, GetPolygon(MultiPolygon, 0) };
+    return Result;
+}
+
+inline wkb_iter4
+WkbIter(wkb_multipolygon4* MultiPolygon)
+{
+    wkb_iter4 Result = { 0, MultiPolygon->NumPolygons, GetPolygon(MultiPolygon, 0) };
+    return Result;
+}
+
+inline wkb_iter2
+WkbIter(wkb_polyhedron2* Polyhedron)
+{
+    wkb_iter2 Result = { 0, Polyhedron->NumPolygons, GetPolygon(Polyhedron, 0) };
+    return Result;
+}
+
+inline wkb_iter3
+WkbIter(wkb_polyhedron3* Polyhedron)
+{
+    wkb_iter3 Result = { 0, Polyhedron->NumPolygons, GetPolygon(Polyhedron, 0) };
+    return Result;
+}
+
+inline wkb_iter4
+WkbIter(wkb_polyhedron4* Polyhedron)
+{
+    wkb_iter4 Result = { 0, Polyhedron->NumPolygons, GetPolygon(Polyhedron, 0) };
+    return Result;
+}
+
+inline wkb_iter2
+WkbIter(wkb_collection2* Collection)
+{
+    wkb_iter2 Result = { 0, Collection->NumGeometries, GetGeometry(Collection, 0) };
+    return Result;
+}
+
+inline wkb_iter3
+WkbIter(wkb_collection3* Collection)
+{
+    wkb_iter3 Result = { 0, Collection->NumGeometries, GetGeometry(Collection, 0) };
+    return Result;
+}
+
+inline wkb_iter4
+WkbIter(wkb_collection4* Collection)
+{
+    wkb_iter4 Result = { 0, Collection->NumGeometries, GetGeometry(Collection, 0) };
+    return Result;
+}
+
 inline ring2*
 GetNextRing(wkb_iter2* Iter)
 {
     ring2* Ring = (ring2*)(Iter->Geom);
-    i32 IsLastElement = (++Iter->CurrentIdx < Iter->MaxIdx);
+    i32 IsLastElement = (++Iter->CurrentIdx < Iter->NumElements);
     Iter->Geom = (void*)(((isz)Ring + GetRingSize(Ring)) * IsLastElement);
     return (ring2*)Iter->Geom;
 }
@@ -1027,7 +1153,7 @@ inline ring3*
 GetNextRing(wkb_iter3* Iter)
 {
     ring3* Ring = (ring3*)(Iter->Geom);
-    i32 IsLastElement = (++Iter->CurrentIdx < Iter->MaxIdx);
+    i32 IsLastElement = (++Iter->CurrentIdx < Iter->NumElements);
     Iter->Geom = (void*)(((isz)Ring + GetRingSize(Ring)) * IsLastElement);
     return (ring3*)Iter->Geom;
 }
@@ -1036,7 +1162,7 @@ inline ring4*
 GetNextRing(wkb_iter4* Iter)
 {
     ring4* Ring = (ring4*)(Iter->Geom);
-    i32 IsLastElement = (++Iter->CurrentIdx < Iter->MaxIdx);
+    i32 IsLastElement = (++Iter->CurrentIdx < Iter->NumElements);
     Iter->Geom = (void*)(((isz)Ring + GetRingSize(Ring)) * IsLastElement);
     return (ring4*)Iter->Geom;
 }
@@ -1045,7 +1171,7 @@ inline wkb_linestring2*
 GetNextLinestring(wkb_iter2* Iter)
 {
     wkb_linestring2* Linestring = (wkb_linestring2*)(Iter->Geom);
-    i32 IsLastElement = (++Iter->CurrentIdx < Iter->MaxIdx);
+    i32 IsLastElement = (++Iter->CurrentIdx < Iter->NumElements);
     Iter->Geom = (void*)(((isz)Linestring + GetLinestringSize(Linestring)) * IsLastElement);
     return (wkb_linestring2*)Iter->Geom;
 }
@@ -1054,7 +1180,7 @@ inline wkb_linestring3*
 GetNextLinestring(wkb_iter3* Iter)
 {
     wkb_linestring3* Linestring = (wkb_linestring3*)(Iter->Geom);
-    i32 IsLastElement = (++Iter->CurrentIdx < Iter->MaxIdx);
+    i32 IsLastElement = (++Iter->CurrentIdx < Iter->NumElements);
     Iter->Geom = (void*)(((isz)Linestring + GetLinestringSize(Linestring)) * IsLastElement);
     return (wkb_linestring3*)Iter->Geom;
 }
@@ -1063,7 +1189,7 @@ inline wkb_linestring4*
 GetNextLinestring(wkb_iter4* Iter)
 {
     wkb_linestring4* Linestring = (wkb_linestring4*)(Iter->Geom);
-    i32 IsLastElement = (++Iter->CurrentIdx < Iter->MaxIdx);
+    i32 IsLastElement = (++Iter->CurrentIdx < Iter->NumElements);
     Iter->Geom = (void*)(((isz)Linestring + GetLinestringSize(Linestring)) * IsLastElement);
     return (wkb_linestring4*)Iter->Geom;
 }
@@ -1072,7 +1198,7 @@ inline wkb_polygon2*
 GetNextPolygon(wkb_iter2* Iter)
 {
     wkb_polygon2* Polygon = (wkb_polygon2*)(Iter->Geom);
-    i32 IsLastElement = (++Iter->CurrentIdx < Iter->MaxIdx);
+    i32 IsLastElement = (++Iter->CurrentIdx < Iter->NumElements);
     Iter->Geom = (void*)(((isz)Polygon + GetPolygonSize(Polygon)) * IsLastElement);
     return (wkb_polygon2*)Iter->Geom;
 }
@@ -1081,7 +1207,7 @@ inline wkb_polygon3*
 GetNextPolygon(wkb_iter3* Iter)
 {
     wkb_polygon3* Polygon = (wkb_polygon3*)(Iter->Geom);
-    i32 IsLastElement = (++Iter->CurrentIdx < Iter->MaxIdx);
+    i32 IsLastElement = (++Iter->CurrentIdx < Iter->NumElements);
     Iter->Geom = (void*)(((isz)Polygon + GetPolygonSize(Polygon)) * IsLastElement);
     return (wkb_polygon3*)Iter->Geom;
 }
@@ -1090,7 +1216,7 @@ inline wkb_polygon4*
 GetNextPolygon(wkb_iter4* Iter)
 {
     wkb_polygon4* Polygon = (wkb_polygon4*)(Iter->Geom);
-    i32 IsLastElement = (++Iter->CurrentIdx < Iter->MaxIdx);
+    i32 IsLastElement = (++Iter->CurrentIdx < Iter->NumElements);
     Iter->Geom = (void*)(((isz)Polygon + GetPolygonSize(Polygon)) * IsLastElement);
     return (wkb_polygon4*)Iter->Geom;
 }
@@ -1099,7 +1225,7 @@ inline wkb_triangle2*
 GetNextTriangle(wkb_iter2* Iter)
 {
     wkb_triangle2* Triangle = (wkb_triangle2*)(Iter->Geom);
-    i32 IsLastElement = (++Iter->CurrentIdx < Iter->MaxIdx);
+    i32 IsLastElement = (++Iter->CurrentIdx < Iter->NumElements);
     Iter->Geom = (void*)(((isz)Triangle + GetTriangleSize(Triangle)) * IsLastElement);
     return (wkb_triangle2*)Iter->Geom;
 }
@@ -1108,7 +1234,7 @@ inline wkb_triangle3*
 GetNextTriangle(wkb_iter3* Iter)
 {
     wkb_triangle3* Triangle = (wkb_triangle3*)(Iter->Geom);
-    i32 IsLastElement = (++Iter->CurrentIdx < Iter->MaxIdx);
+    i32 IsLastElement = (++Iter->CurrentIdx < Iter->NumElements);
     Iter->Geom = (void*)(((isz)Triangle + GetTriangleSize(Triangle)) * IsLastElement);
     return (wkb_triangle3*)Iter->Geom;
 }
@@ -1117,7 +1243,7 @@ inline wkb_triangle4*
 GetNextTriangle(wkb_iter4* Iter)
 {
     wkb_triangle4* Triangle = (wkb_triangle4*)(Iter->Geom);
-    i32 IsLastElement = (++Iter->CurrentIdx < Iter->MaxIdx);
+    i32 IsLastElement = (++Iter->CurrentIdx < Iter->NumElements);
     Iter->Geom = (void*)(((isz)Triangle + GetTriangleSize(Triangle)) * IsLastElement);
     return (wkb_triangle4*)Iter->Geom;
 }
@@ -1126,7 +1252,7 @@ inline wkb_geometry2*
 GetNextGeometry(wkb_iter2* Iter)
 {
     wkb_geometry2* Geometry = (wkb_geometry2*)(Iter->Geom);
-    i32 IsLastElement = (++Iter->CurrentIdx < Iter->MaxIdx);
+    i32 IsLastElement = (++Iter->CurrentIdx < Iter->NumElements);
     Iter->Geom = (void*)(((isz)Geometry + GetGeometrySize(Geometry)) * IsLastElement);
     return (wkb_geometry2*)Iter->Geom;
 }
@@ -1135,7 +1261,7 @@ inline wkb_geometry3*
 GetNextGeometry(wkb_iter3* Iter)
 {
     wkb_geometry3* Geometry = (wkb_geometry3*)(Iter->Geom);
-    i32 IsLastElement = (++Iter->CurrentIdx < Iter->MaxIdx);
+    i32 IsLastElement = (++Iter->CurrentIdx < Iter->NumElements);
     Iter->Geom = (void*)(((isz)Geometry + GetGeometrySize(Geometry)) * IsLastElement);
     return (wkb_geometry3*)Iter->Geom;
 }
@@ -1144,9 +1270,350 @@ inline wkb_geometry4*
 GetNextGeometry(wkb_iter4* Iter)
 {
     wkb_geometry4* Geometry = (wkb_geometry4*)(Iter->Geom);
-    i32 IsLastElement = (++Iter->CurrentIdx < Iter->MaxIdx);
+    i32 IsLastElement = (++Iter->CurrentIdx < Iter->NumElements);
     Iter->Geom = (void*)(((isz)Geometry + GetGeometrySize(Geometry)) * IsLastElement);
     return (wkb_geometry4*)Iter->Geom;
+}
+
+//=================================
+// Get BBox functions
+//=================================
+
+inline bbox2
+GetBBox(wkb_point2* Point)
+{
+    bbox2 Result = BBox2(Point->Point, Point->Point);
+    return Result;
+}
+
+inline bbox3
+GetBBox(wkb_point3* Point)
+{
+    bbox3 Result = BBox3(Point->Point, Point->Point);
+    return Result;
+}
+
+inline bbox4
+GetBBox(wkb_point4* Point)
+{
+    bbox4 Result = BBox4(Point->Point, Point->Point);
+    return Result;
+}
+
+inline bbox2
+GetBBox(wkb_linestring2* Linestring)
+{
+    bbox2 Result = BBox2(DBL_MAX, DBL_MAX, -DBL_MAX, -DBL_MAX);
+    for (v2* Vertex = GetVertex(Linestring, 0), *EndOfGeom = GetVertex(Linestring, Linestring->NumPoints)
+         ; Vertex < EndOfGeom
+         ; Vertex++)
+    {
+        Result = Merge(Result, BBox2(*Vertex, *Vertex));
+    }
+    return Result;
+}
+
+inline bbox3
+GetBBox(wkb_linestring3* Linestring)
+{
+    bbox3 Result = BBox3(DBL_MAX, DBL_MAX, DBL_MAX, -DBL_MAX, -DBL_MAX, -DBL_MAX);
+    for (v3* Vertex = GetVertex(Linestring, 0), *EndOfGeom = GetVertex(Linestring, Linestring->NumPoints)
+         ; Vertex < EndOfGeom
+         ; Vertex++)
+    {
+        Result = Merge(Result, BBox3(*Vertex, *Vertex));
+    }
+    return Result;
+}
+
+inline bbox4
+GetBBox(wkb_linestring4* Linestring)
+{
+    bbox4 Result = BBox4(DBL_MAX, DBL_MAX, DBL_MAX, DBL_MAX, -DBL_MAX, -DBL_MAX, -DBL_MAX, -DBL_MAX);
+    for (v4* Vertex = GetVertex(Linestring, 0), *EndOfGeom = GetVertex(Linestring, Linestring->NumPoints)
+         ; Vertex < EndOfGeom
+         ; Vertex++)
+    {
+        Result = Merge(Result, BBox4(*Vertex, *Vertex));
+    }
+    return Result;
+}
+
+inline bbox2
+GetBBox(wkb_polygon2* Polygon)
+{
+    bbox2 Result = BBox2(DBL_MAX, DBL_MAX, -DBL_MAX, -DBL_MAX);
+    ring2* Ring = (ring2*)&Polygon[1];
+    for (v2* Vertex = GetVertex(Ring, 0), *EndOfGeom = GetVertex(Ring, Ring->NumPoints)
+         ; Vertex < EndOfGeom
+         ; Vertex++)
+    {
+        Result = Merge(Result, BBox2(*Vertex, *Vertex));
+    }
+    return Result;
+}
+
+inline bbox3
+GetBBox(wkb_polygon3* Polygon)
+{
+    bbox3 Result = BBox3(DBL_MAX, DBL_MAX, DBL_MAX, -DBL_MAX, -DBL_MAX, -DBL_MAX);
+    ring3* Ring = (ring3*)&Polygon[1];
+    for (v3* Vertex = GetVertex(Ring, 0), *EndOfGeom = GetVertex(Ring, Ring->NumPoints)
+         ; Vertex < EndOfGeom
+         ; Vertex++)
+    {
+        Result = Merge(Result, BBox3(*Vertex, *Vertex));
+    }
+    return Result;
+}
+
+inline bbox4
+GetBBox(wkb_polygon4* Polygon)
+{
+    bbox4 Result = BBox4(DBL_MAX, DBL_MAX, DBL_MAX, DBL_MAX, -DBL_MAX, -DBL_MAX, -DBL_MAX, -DBL_MAX);
+    ring4* Ring = (ring4*)&Polygon[1];
+    for (v4* Vertex = GetVertex(Ring, 0), *EndOfGeom = GetVertex(Ring, Ring->NumPoints)
+         ; Vertex < EndOfGeom
+         ; Vertex++)
+    {
+        Result = Merge(Result, BBox4(*Vertex, *Vertex));
+    }
+    return Result;
+}
+
+inline bbox2
+GetBBox(wkb_polyhedron2* Polyhedron)
+{
+    bbox2 Result = BBox2(DBL_MAX, DBL_MAX, -DBL_MAX, -DBL_MAX);
+    wkb_iter2 Iter = WkbIter(Polyhedron);
+    for (wkb_polygon2* Polygon = (wkb_polygon2*)Iter.Geom; Polygon; Polygon = GetNextPolygon(&Iter))
+    {
+        Result = Merge(Result, GetBBox(Polygon));
+    }
+    return Result;
+}
+
+inline bbox3
+GetBBox(wkb_polyhedron3* Polyhedron)
+{
+    bbox3 Result = BBox3(DBL_MAX, DBL_MAX, DBL_MAX, -DBL_MAX, -DBL_MAX, -DBL_MAX);
+    wkb_iter3 Iter = WkbIter(Polyhedron);
+    for (wkb_polygon3* Polygon = (wkb_polygon3*)Iter.Geom; Polygon; Polygon = GetNextPolygon(&Iter))
+    {
+        Result = Merge(Result, GetBBox(Polygon));
+    }
+    return Result;
+}
+
+inline bbox4
+GetBBox(wkb_polyhedron4* Polyhedron)
+{
+    bbox4 Result = BBox4(DBL_MAX, DBL_MAX, DBL_MAX, DBL_MAX, -DBL_MAX, -DBL_MAX, -DBL_MAX, -DBL_MAX);
+    wkb_iter4 Iter = WkbIter(Polyhedron);
+    for (wkb_polygon4* Polygon = (wkb_polygon4*)Iter.Geom; Polygon; Polygon = GetNextPolygon(&Iter))
+    {
+        Result = Merge(Result, GetBBox(Polygon));
+    }
+    return Result;
+}
+
+inline bbox2
+GetBBox(wkb_multipoint2* MultiPoint)
+{
+    bbox2 Result = BBox2(DBL_MAX, DBL_MAX, -DBL_MAX, -DBL_MAX);
+    for (wkb_point2* Point = GetPoint(MultiPoint, 0), *EndOfGeom = GetPoint(MultiPoint, MultiPoint->NumPoints)
+         ; Point < EndOfGeom
+         ; Point++)
+    {
+        Result = Merge(Result, BBox2(Point->Point, Point->Point));
+    }
+    return Result;
+}
+
+inline bbox3
+GetBBox(wkb_multipoint3* MultiPoint)
+{
+    bbox3 Result = BBox3(DBL_MAX, DBL_MAX, DBL_MAX, -DBL_MAX, -DBL_MAX, -DBL_MAX);
+    for (wkb_point3* Point = GetPoint(MultiPoint, 0), *EndOfGeom = GetPoint(MultiPoint, MultiPoint->NumPoints)
+         ; Point < EndOfGeom
+         ; Point++)
+    {
+        Result = Merge(Result, BBox3(Point->Point, Point->Point));
+    }
+    return Result;
+}
+
+inline bbox4
+GetBBox(wkb_multipoint4* MultiPoint)
+{
+    bbox4 Result = BBox4(DBL_MAX, DBL_MAX, DBL_MAX, DBL_MAX, -DBL_MAX, -DBL_MAX, -DBL_MAX, -DBL_MAX);
+    for (wkb_point4* Point = GetPoint(MultiPoint, 0), *EndOfGeom = GetPoint(MultiPoint, MultiPoint->NumPoints)
+         ; Point < EndOfGeom
+         ; Point++)
+    {
+        Result = Merge(Result, BBox4(Point->Point, Point->Point));
+    }
+    return Result;
+}
+
+inline bbox2
+GetBBox(wkb_multilinestring2* MultiLinestring)
+{
+    bbox2 Result = BBox2(DBL_MAX, DBL_MAX, -DBL_MAX, -DBL_MAX);
+    wkb_iter2 Iter = WkbIter(MultiLinestring);
+    for (wkb_linestring2* Linestring = (wkb_linestring2*)Iter.Geom; Linestring; Linestring = GetNextLinestring(&Iter))
+    {
+        Result = Merge(Result, GetBBox(Linestring));
+    }
+    return Result;
+}
+
+inline bbox3
+GetBBox(wkb_multilinestring3* MultiLinestring)
+{
+    bbox3 Result = BBox3(DBL_MAX, DBL_MAX, DBL_MAX, -DBL_MAX, -DBL_MAX, -DBL_MAX);
+    wkb_iter3 Iter = WkbIter(MultiLinestring);
+    for (wkb_linestring3* Linestring = (wkb_linestring3*)Iter.Geom; Linestring; Linestring = GetNextLinestring(&Iter))
+    {
+        Result = Merge(Result, GetBBox(Linestring));
+    }
+    return Result;
+}
+
+inline bbox4
+GetBBox(wkb_multilinestring4* MultiLinestring)
+{
+    bbox4 Result = BBox4(DBL_MAX, DBL_MAX, DBL_MAX, DBL_MAX, -DBL_MAX, -DBL_MAX, -DBL_MAX, -DBL_MAX);
+    wkb_iter4 Iter = WkbIter(MultiLinestring);
+    for (wkb_linestring4* Linestring = (wkb_linestring4*)Iter.Geom; Linestring; Linestring = GetNextLinestring(&Iter))
+    {
+        Result = Merge(Result, GetBBox(Linestring));
+    }
+    return Result;
+}
+
+inline bbox2
+GetBBox(wkb_multipolygon2* MultiPolygon)
+{
+    bbox2 Result = BBox2(DBL_MAX, DBL_MAX, -DBL_MAX, -DBL_MAX);
+    wkb_iter2 Iter = WkbIter(MultiPolygon);
+    for (wkb_polygon2* Polygon = (wkb_polygon2*)Iter.Geom; Polygon; Polygon = GetNextPolygon(&Iter))
+    {
+        Result = Merge(Result, GetBBox(Polygon));
+    }
+    return Result;
+}
+
+inline bbox3
+GetBBox(wkb_multipolygon3* MultiPolygon)
+{
+    bbox3 Result = BBox3(DBL_MAX, DBL_MAX, DBL_MAX, -DBL_MAX, -DBL_MAX, -DBL_MAX);
+    wkb_iter3 Iter = WkbIter(MultiPolygon);
+    for (wkb_polygon3* Polygon = (wkb_polygon3*)Iter.Geom; Polygon; Polygon = GetNextPolygon(&Iter))
+    {
+        Result = Merge(Result, GetBBox(Polygon));
+    }
+    return Result;
+}
+
+inline bbox4
+GetBBox(wkb_multipolygon4* MultiPolygon)
+{
+    bbox4 Result = BBox4(DBL_MAX, DBL_MAX, DBL_MAX, DBL_MAX, -DBL_MAX, -DBL_MAX, -DBL_MAX, -DBL_MAX);
+    wkb_iter4 Iter = WkbIter(MultiPolygon);
+    for (wkb_polygon4* Polygon = (wkb_polygon4*)Iter.Geom; Polygon; Polygon = GetNextPolygon(&Iter))
+    {
+        Result = Merge(Result, GetBBox(Polygon));
+    }
+    return Result;
+}
+
+inline bbox2
+GetBBox(wkb_collection2* Collection)
+{
+    bbox2 Result = BBox2(DBL_MAX, DBL_MAX, -DBL_MAX, -DBL_MAX);
+    wkb_iter2 Iter = WkbIter(Collection);
+    for (wkb_geometry2* Geometry = (wkb_geometry2*)Iter.Geom; Geometry; Geometry = GetNextGeometry(&Iter))
+    {
+        bbox2 BBox = {0};
+        switch (Geometry->Header.WkbType)
+        {
+            case Wkb_Point: BBox = GetBBox(&Geometry->Point); break;
+            case Wkb_Linestring: BBox = GetBBox(&Geometry->Linestring); break;
+            case Wkb_Polygon:
+            case Wkb_Triangle: BBox = GetBBox(&Geometry->Polygon); break;
+            case Wkb_PolyhedralSurface:
+            case Wkb_TIN: BBox = GetBBox(&Geometry->Polyhedron); break;
+            case Wkb_MultiPoint: BBox = GetBBox(&Geometry->MultiPoint); break;
+            case Wkb_MultiLinestring: BBox = GetBBox(&Geometry->MultiLinestring); break;
+            case Wkb_MultiPolygon: BBox = GetBBox(&Geometry->MultiPolygon); break;
+            case Wkb_GeometryCollection: BBox = GetBBox(&Geometry->Collection); break;
+        }
+        Result = Merge(Result, BBox);
+    }
+    return Result;
+}
+
+inline bbox3
+GetBBox(wkb_collection3* Collection)
+{
+    bbox3 Result = BBox3(DBL_MAX, DBL_MAX, DBL_MAX, -DBL_MAX, -DBL_MAX, -DBL_MAX);
+    wkb_iter3 Iter = WkbIter(Collection);
+    for (wkb_geometry3* Geometry = (wkb_geometry3*)Iter.Geom; Geometry; Geometry = GetNextGeometry(&Iter))
+    {
+        bbox3 BBox = {0};
+        switch (Geometry->Header.WkbType)
+        {
+            case Wkb_PointZ:
+            case Wkb_PointM: BBox = GetBBox(&Geometry->Point); break;
+            case Wkb_LinestringZ:
+            case Wkb_LinestringM: BBox = GetBBox(&Geometry->Linestring); break;
+            case Wkb_PolygonZ:
+            case Wkb_PolygonM:
+            case Wkb_TriangleZ:
+            case Wkb_TriangleM: BBox = GetBBox(&Geometry->Polygon); break;
+            case Wkb_PolyhedralSurfaceZ:
+            case Wkb_PolyhedralSurfaceM:
+            case Wkb_TINZ:
+            case Wkb_TINM: BBox = GetBBox(&Geometry->Polyhedron); break;
+            case Wkb_MultiPointZ:
+            case Wkb_MultiPointM: BBox = GetBBox(&Geometry->MultiPoint); break;
+            case Wkb_MultiLinestringZ:
+            case Wkb_MultiLinestringM: BBox = GetBBox(&Geometry->MultiLinestring); break;
+            case Wkb_MultiPolygonZ:
+            case Wkb_MultiPolygonM: BBox = GetBBox(&Geometry->MultiPolygon); break;
+            case Wkb_GeometryCollectionZ:
+            case Wkb_GeometryCollectionM: BBox = GetBBox(&Geometry->Collection); break;
+        }
+        Result = Merge(Result, BBox);
+    }
+    return Result;
+}
+
+inline bbox4
+GetBBox(wkb_collection4* Collection)
+{
+    bbox4 Result = BBox4(DBL_MAX, DBL_MAX, DBL_MAX, DBL_MAX, -DBL_MAX, -DBL_MAX, -DBL_MAX, -DBL_MAX);
+    wkb_iter4 Iter = WkbIter(Collection);
+    for (wkb_geometry4* Geometry = (wkb_geometry4*)Iter.Geom; Geometry; Geometry = GetNextGeometry(&Iter))
+    {
+        bbox4 BBox = {0};
+        switch (Geometry->Header.WkbType)
+        {
+            case Wkb_PointZM: BBox = GetBBox(&Geometry->Point); break;
+            case Wkb_LinestringZM: BBox = GetBBox(&Geometry->Linestring); break;
+            case Wkb_PolygonZM:
+            case Wkb_TriangleZM: BBox = GetBBox(&Geometry->Polygon); break;
+            case Wkb_PolyhedralSurfaceZM:
+            case Wkb_TINZM: BBox = GetBBox(&Geometry->Polyhedron); break;
+            case Wkb_MultiPointZM: BBox = GetBBox(&Geometry->MultiPoint); break;
+            case Wkb_MultiLinestringZM: BBox = GetBBox(&Geometry->MultiLinestring); break;
+            case Wkb_MultiPolygonZM: BBox = GetBBox(&Geometry->MultiPolygon); break;
+            case Wkb_GeometryCollectionZM: BBox = GetBBox(&Geometry->Collection); break;
+        }
+        Result = Merge(Result, BBox);
+    }
+    return Result;
 }
 
 //=================================

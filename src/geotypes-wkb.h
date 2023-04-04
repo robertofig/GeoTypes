@@ -455,6 +455,10 @@ v2*              GetVertex(wkb_linestring2* Linestring, usz TargetIdx);
 v3*              GetVertex(wkb_linestring3* Linestring, usz TargetIdx);
 v4*              GetVertex(wkb_linestring4* Linestring, usz TargetIdx);
 
+v2*              GetVertex(ring2* Ring, usz TargetIdx);
+v3*              GetVertex(ring3* Ring, usz TargetIdx);
+v4*              GetVertex(ring4* Ring, usz TargetIdx);
+
 ring2*           GetRing(wkb_polygon2* Polygon, usz TargetIdx);
 ring3*           GetRing(wkb_polygon3* Polygon, usz TargetIdx);
 ring4*           GetRing(wkb_polygon4* Polygon, usz TargetIdx);
@@ -538,23 +542,43 @@ usz GetCollectionSize(wkb_collection4* Collection);
 struct wkb_iter2
 {
     usz CurrentIdx;
-    usz MaxIdx;
+    usz NumElements;
     void* Geom;
 };
 
 struct wkb_iter3
 {
     usz CurrentIdx;
-    usz MaxIdx;
+    usz NumElements;
     void* Geom;
 };
 
 struct wkb_iter4
 {
     usz CurrentIdx;
-    usz MaxIdx;
+    usz NumElements;
     void* Geom;
 };
+
+wkb_iter2        WkbIter(wkb_polygon2* Polygon);
+wkb_iter3        WkbIter(wkb_polygon3* Polygon);
+wkb_iter4        WkbIter(wkb_polygon4* Polygon);
+
+wkb_iter2        WkbIter(wkb_multilinestring2* MultiLinestring);
+wkb_iter3        WkbIter(wkb_multilinestring3* MultiLinestring);
+wkb_iter4        WkbIter(wkb_multilinestring4* MultiLinestring);
+
+wkb_iter2        WkbIter(wkb_multipolygon2* MultiPolygon);
+wkb_iter3        WkbIter(wkb_multipolygon3* MultiPolygon);
+wkb_iter4        WkbIter(wkb_multipolygon4* MultiPolygon);
+
+wkb_iter2        WkbIter(wkb_polyhedron2* Polyhedron);
+wkb_iter3        WkbIter(wkb_polyhedron3* Polyhedron);
+wkb_iter4        WkbIter(wkb_polyhedron4* Polyhedron);
+
+wkb_iter2        WkbIter(wkb_collection2* Collection);
+wkb_iter3        WkbIter(wkb_collection3* Collection);
+wkb_iter4        WkbIter(wkb_collection4* Collection);
 
 ring2*           GetNextRing(wkb_iter2* Iter);
 ring3*           GetNextRing(wkb_iter3* Iter);
@@ -575,6 +599,42 @@ wkb_triangle4*   GetNextTriangle(wkb_iter4* Iter);
 wkb_geometry2*   GetNextGeometry(wkb_iter2* Iter);
 wkb_geometry3*   GetNextGeometry(wkb_iter3* Iter);
 wkb_geometry4*   GetNextGeometry(wkb_iter4* Iter);
+
+//=================================
+// Get BBox functions
+//=================================
+
+bbox2 GetBBox(wkb_point2* Point);
+bbox3 GetBBox(wkb_point3* Point);
+bbox4 GetBBox(wkb_point4* Point);
+
+bbox2 GetBBox(wkb_linestring2* Linestring);
+bbox3 GetBBox(wkb_linestring3* Linestring);
+bbox4 GetBBox(wkb_linestring4* Linestring);
+
+bbox2 GetBBox(wkb_polygon2* Polygon);
+bbox3 GetBBox(wkb_polygon3* Polygon);
+bbox4 GetBBox(wkb_polygon4* Polygon);
+
+bbox2 GetBBox(wkb_polyhedron2* Polyhedron);
+bbox3 GetBBox(wkb_polyhedron3* Polyhedron);
+bbox4 GetBBox(wkb_polyhedron4* Polyhedron);
+
+bbox2 GetBBox(wkb_multipoint2* MultiPoint);
+bbox3 GetBBox(wkb_multipoint3* MultiPoint);
+bbox4 GetBBox(wkb_multipoint4* MultiPoint);
+
+bbox2 GetBBox(wkb_multilinestring2* MultiLinestring);
+bbox3 GetBBox(wkb_multilinestring3* MultiLinestring);
+bbox4 GetBBox(wkb_multilinestring4* MultiLinestring);
+
+bbox2 GetBBox(wkb_multipolygon2* MultiPolygon);
+bbox3 GetBBox(wkb_multipolygon3* MultiPolygon);
+bbox4 GetBBox(wkb_multipolygon4* MultiPolygon);
+
+bbox2 GetBBox(wkb_collection2* Collection);
+bbox3 GetBBox(wkb_collection3* Collection);
+bbox4 GetBBox(wkb_collection4* Collection);
 
 //=================================
 // Add geom functions

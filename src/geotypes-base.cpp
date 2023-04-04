@@ -283,6 +283,72 @@ Intersects(bbox2 B, circle C)
 }
 
 //==================================
+// BBox 3D
+//==================================
+
+f64
+AreaXY(bbox3 A)
+{
+    f64 Result = (A.Max.X - A.Min.X) * (A.Max.Y - A.Min.Y);
+    return Result;
+}
+
+f64
+AreaXZ(bbox3 A)
+{
+    f64 Result = (A.Max.X - A.Min.X) * (A.Max.Z - A.Min.Z);
+    return Result;
+}
+
+f64
+AreaYZ(bbox3 A)
+{
+    f64 Result = (A.Max.Y - A.Min.Y) * (A.Max.Z - A.Min.Z);
+    return Result;
+}
+
+bbox3
+Merge(bbox3 A, bbox3 B)
+{
+    bbox3 Result = BBox3(Min(A.Min.X, B.Min.X), Min(A.Min.Y, B.Min.Y), Min(A.Min.Z, B.Min.Z),
+                         Max(A.Max.X, B.Max.X), Max(A.Max.Y, B.Max.Y), Max(A.Max.Z, B.Max.Z));
+    return Result;
+}
+
+//==================================
+// BBox 4D
+//==================================
+
+f64
+AreaXY(bbox4 A)
+{
+    f64 Result = (A.Max.X - A.Min.X) * (A.Max.Y - A.Min.Y);
+    return Result;
+}
+
+f64
+AreaXZ(bbox4 A)
+{
+    f64 Result = (A.Max.X - A.Min.X) * (A.Max.Z - A.Min.Z);
+    return Result;
+}
+
+f64
+AreaYZ(bbox4 A)
+{
+    f64 Result = (A.Max.Y - A.Min.Y) * (A.Max.Z - A.Min.Z);
+    return Result;
+}
+
+bbox4
+Merge(bbox4 A, bbox4 B)
+{
+    bbox4 Result = BBox4(Min(A.Min.X, B.Min.X), Min(A.Min.Y, B.Min.Y), Min(A.Min.Z, B.Min.Z), Min(A.Min.M, B.Min.M),
+                         Max(A.Max.X, B.Max.X), Max(A.Max.Y, B.Max.Y), Max(A.Max.Z, B.Max.Z), Max(A.Max.M, B.Max.M));
+    return Result;
+}
+
+//==================================
 // Line 2D
 //==================================
 

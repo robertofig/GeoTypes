@@ -122,6 +122,18 @@ inline v4 V4(f64 X, f64 Y, f64 Z, f64 M) { v4 Result = { X, Y, Z, M }; return Re
 inline v4 V4(v2 XY, f64 Z, f64 M) { return V4(XY.X, XY.Y, Z, M); }
 inline v4 V4(v3 XYZ, f64 M) { return V4(XYZ.X, XYZ.Y, XYZ.Z, M); }
 
+inline v4   operator+(v4 A, v4 B) { return V4(A.X+B.X, A.Y+B.Y, A.Z+B.Z, A.M+B.M); }
+inline v4&  operator+=(v4& A, v4 B) { A = A + B; return A; }
+inline v4   operator-(v4 A, v4 B) { return V4(A.X-B.X, A.Y-B.Y, A.Z-B.Z, A.M-B.M); }
+inline v4&  operator-=(v4& A, v4 B) { A = A - B; return A; }
+inline v4   operator*(v4 A, f64 Scalar) { return V4(A.X*Scalar, A.Y*Scalar, A.Z*Scalar, A.M*Scalar); }
+inline v4   operator*(f64 Scalar, v4 A) { return A * Scalar; }
+inline v4&  operator*=(v4& A, f64 Scalar) { A = A * Scalar; return A; }
+inline v4   operator/(v4 A, f64 Scalar) { return V4(A.X/Scalar, A.Y/Scalar, A.Z/Scalar, A.M/Scalar); }
+inline v4   operator/(f64 Scalar, v4 A) { return A / Scalar; }
+inline v4&  operator/=(v4& A, f64 Scalar) { A = A / Scalar; return A; }
+inline bool operator==(v4 A, v4 B) { return A.X == B.X && A.Y == B.Y && A.Z == B.Z && A.M == B.M; }
+
 #define INVALID_V4 V4(INF, INF, INF, INF)
 
 //==================================
@@ -159,6 +171,8 @@ inline bbox2 BBox2(v2 Min, v2 Max) { bbox2 Result = { Min, Max }; return Result;
 inline bbox2 BBox2(f64 XMin, f64 YMin, f64 XMax, f64 YMax) { return BBox2(V2(XMin, YMin), V2(XMax, YMax)); }
 inline bbox2 BBox2(v2 Min, f64 Width, f64 Height) { return BBox2(Min, Min + V2(Width, Height)); }
 
+inline bool operator==(bbox2 A, bbox2 B) { return A.Min == B.Min && A.Max == B.Max; }
+
 f64   Area(bbox2 A);                 // Area of bbox2.
 bbox2 Merge(bbox2 A, bbox2 B);       // Creates new bbox2 from the mins and maxs of two bbox2.
 bool  Intersects(bbox2 A, bbox2 B);  // Check if two bbox2 overlap.
@@ -166,6 +180,48 @@ bool  Intersects(v2 P, bbox2 B);     // Check if point is inside or on bbox2.
 bool  Intersects(bbox2 B, v2 P);     // Same as above.
 bool  Intersects(circle C, bbox2 B); // Check if circle and bbox2 overlap.
 bool  Intersects(bbox2 B, circle C); // Same as above.
+
+//==================================
+// BBox 3D
+//==================================
+
+struct bbox3
+{
+    v3 Min, Max;
+};
+
+inline bbox3 BBox3(v3 Min, v3 Max) { bbox3 Result = { Min, Max }; return Result; }
+inline bbox3 BBox3(f64 XMin, f64 YMin, f64 ZMin, f64 XMax, f64 YMax, f64 ZMax) { return BBox3(V3(XMin, YMin, ZMin), V3(XMax, YMax, ZMax)); }
+inline bbox3 BBox3(v3 Min, f64 Width, f64 Height, f64 Depth) { return BBox3(Min, Min + V3(Width, Height, Depth)); }
+
+inline bool operator==(bbox3 A, bbox3 B) { return A.Min == B.Min && A.Max == B.Max; }
+
+f64   AreaXY(bbox3 A);         // Area of XY plane from bbox3.
+f64   AreaXZ(bbox3 A);         // Area of XZ plane from bbox3.
+f64   AreaYZ(bbox3 A);         // Area of YZ plane from bbox3.
+f64   Volume(bbox3 A);         // Volume of bbox3.
+bbox3 Merge(bbox3 A, bbox3 B); // Creates new bbox3 from the mins and maxs of two bbox3.
+
+//==================================
+// BBox 4D
+//==================================
+
+struct bbox4
+{
+    v4 Min, Max;
+};
+
+inline bbox4 BBox4(v4 Min, v4 Max) { bbox4 Result = { Min, Max }; return Result; }
+inline bbox4 BBox4(f64 XMin, f64 YMin, f64 ZMin, f64 MMin, f64 XMax, f64 YMax, f64 ZMax, f64 MMax) { return BBox4(V4(XMin, YMin, ZMin, MMin), V4(XMax, YMax, ZMax, MMax)); }
+inline bbox4 BBox4(v4 Min, f64 Width, f64 Height, f64 Depth, f64 Extent) { return BBox4(Min, Min + V4(Width, Height, Depth, Extent)); }
+
+inline bool operator==(bbox4 A, bbox4 B) { return A.Min == B.Min && A.Max == B.Max; }
+
+f64   AreaXY(bbox4 A);         // Area of XY plane from bbox4.
+f64   AreaXZ(bbox4 A);         // Area of XZ plane from bbox4.
+f64   AreaYZ(bbox4 A);         // Area of YZ plane from bbox4.
+f64   Volume(bbox4 A);         // Volume of XYZ cube of bbox4.
+bbox4 Merge(bbox4 A, bbox4 B); // Creates new bbox4 from the mins and maxs of two bbox4.
 
 //==================================
 // Line 2D
