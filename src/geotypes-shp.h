@@ -171,7 +171,7 @@ external bool CreateField(shapefile* Shape, char* FieldName, u8 FieldLen, u8 Pre
 // Read data functions
 //=================================
 
-external shapefile   ImportShp(void* ShpPtr, usz ShpSize, void* ShxPtr, usz ShxSize, void* DbfPtr, usz DbfSize);
+external shapefile   ImportShp(buffer Shp, buffer Shx, buffer Dbf);
 external shapefile   OpenAndImportShp(void* ShpFilePath); // ShpFilePath must be in the OS unicode encoding.
 external shp_feature GetFeature(shapefile* Shape, i32 TargetIdx); // Idx from 0..NumFeatures-1.
 external shp_part    GetGeometry(shp_feature Feat, i32 TargetIdx); // Idx from 0..NumParts-1.

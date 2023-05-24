@@ -432,18 +432,18 @@ CreateField(shapefile* Shape, char* FieldName, u8 FieldLen, u8 Precision, shp_fi
 //=================================
 
 external shapefile
-ImportShp(void* ShpPtr, usz ShpSize, void* ShxPtr, usz ShxSize, void* DbfPtr, usz DbfSize)
+ImportShp(buffer _Shp, buffer _Shx, buffer _Dbf)
 {
     shapefile Result = {0};
     
-    shp_header* Shp = (shp_header*)ShpPtr;
-    shx_header* Shx = (shx_header*)ShxPtr;
-    dbf_header* Dbf = (dbf_header*)DbfPtr;
+    shp_header* Shp = (shp_header*)_Shp.Base;
+    shx_header* Shx = (shx_header*)_Shx.Base;
+    dbf_header* Dbf = (dbf_header*)_Dbf.Base;
     
     i32 ShpReadSize = 2 * FlipEndian32(Shp->FileLength);
     i32 ShxReadSize = 2 * FlipEndian32(Shx->FileLength);
     i32 DbfReadSize = Dbf->HeaderSize + (Dbf->RecordSize * Dbf->NumRecords);
-    if (ShpReadSize > ShpSize || ShxReadSize > ShxSize || DbfReadSize > DbfSize
+    if (ShpReadSize > _Shp.WriteCur || ShxReadSize > _Shx.WriteCur || DbfReadSize > _Dbf.WriteCur
         || ShpReadSize < 0 || ShxReadSize < 0 || DbfReadSize < 0)
     {
         return Result;
@@ -469,11 +469,11 @@ ImportShp(void* ShpPtr, usz ShpSize, void* ShxPtr, usz ShxSize, void* DbfPtr, us
         return Result;
     }
     
-    Result.ShpFilePtr = (u8*)ShpPtr;
+    Result.ShpFilePtr = (u8*)Shp;
     Result.ShpFileSize = ShpReadSize;
-    Result.ShxFilePtr = (u8*)ShxPtr;
+    Result.ShxFilePtr = (u8*)Shx;
     Result.ShxFileSize = ShxReadSize;
-    Result.DbfFilePtr = (u8*)DbfPtr;
+    Result.DbfFilePtr = (u8*)Dbf;
     Result.DbfFileSize = DbfReadSize;
     
     Result.Type = Shp->Type;
@@ -511,19 +511,19 @@ OpenAndImportShp(void* ShpPathStr)
         file DbfFile = OpenFileHandle(AccompanyFiles, READ_SHARE);
         usz DbfFileSize = FileSizeOf(DbfFile);
         
-        u8* Mem = NULL;
+        buffer Mem = {0};
         if (ShpFileSize > 0 && ShxFileSize > 0 && DbfFileSize > 0
-            && (Mem = (u8*)GetMemory(ShpFileSize + ShxFileSize + DbfFileSize, 0, MEM_READ|MEM_WRITE)))
+            && (Mem = GetMemory(ShpFileSize + ShxFileSize + DbfFileSize, 0, MEM_READ|MEM_WRITE)).Base)
         {
-            u8* ShpPtr = Mem;
-            u8* ShxPtr = Mem + ShpFileSize;
-            u8* DbfPtr = ShxPtr + ShxFileSize;
+            buffer Shp = Buffer(Mem.Base, 0, ShpFileSize);
+            buffer Shx = Buffer(Shp.Base+ShpFileSize, 0, ShxFileSize);
+            buffer Dbf = Buffer(Shx.Base+ShxFileSize, 0, DbfFileSize);
             
-            if (ReadFromFile(ShpFile, ShpPtr, ShpFileSize, 0)
-                && ReadFromFile(ShxFile, ShxPtr, ShxFileSize, 0)
-                && ReadFromFile(DbfFile, DbfPtr, DbfFileSize, 0))
+            if (ReadFromFile(ShpFile, &Shp, ShpFileSize, 0)
+                && ReadFromFile(ShxFile, &Shx, ShxFileSize, 0)
+                && ReadFromFile(DbfFile, &Dbf, DbfFileSize, 0))
             {
-                Result = ImportShp(ShpPtr, ShpFileSize, ShxPtr, ShxFileSize, DbfPtr, DbfFileSize);
+                Result = ImportShp(Shp, Shx, Dbf);
             }
         }
         
