@@ -6,7 +6,7 @@ BSE='test-base'
 WKB='test-wkb'
 SHP='test-shp'
 TinyBasePath=''
-CompileOpts='-I../src -I${TinyBasePath} -g -Wall -mavx2 -fpermissive -w'
+CompileOpts='-I../src  -I'${TinyBasePath}' -g -Wall -mavx2 -fpermissive -w'
 
 mkdir -p ../build
 cd ../build

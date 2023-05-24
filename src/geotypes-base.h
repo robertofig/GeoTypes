@@ -52,18 +52,14 @@ v2  Unit(v2 A);        // Unit vector.
 // 3D Vector
 //==================================
 
-union v3
+struct v3
 {
-    struct 
-    {
-        f64 X, Y;
-        union { f64 Z, M; };
-    };
-    struct
+    union
     {
         v2 XY;
-        union { f64 Z, M; };
+        struct { f64 X, Y; };
     };
+    union { f64 M, Z; };
 };
 
 inline v3 V3(f64 X, f64 Y, f64 Z) { v3 Result = { X, Y, Z }; return Result; }
@@ -100,22 +96,19 @@ v3  Unit(v3 A);             // Unit vector.
 // 4D Vector
 //==================================
 
-union v4
+struct v4
 {
-    struct
-    {
-        f64 X, Y, Z, M;
-    };
-    struct
+    union
     {
         v3 XYZ;
-        f64 M;
+        struct
+        {
+            v2 XY;
+            f64 Z;
+        };
+        struct { f64 X, Y, _Padding; };
     };
-    struct
-    {
-        v2 XY;
-        f64 Z, M;
-    };
+    f64 M;
 };
 
 inline v4 V4(f64 X, f64 Y, f64 Z, f64 M) { v4 Result = { X, Y, Z, M }; return Result; }
