@@ -155,6 +155,365 @@ Dist2(v3 A, v3 B)
 }
 
 //==================================
+// 4D Vector
+//==================================
+
+f64
+Dot(v4 A, v4 B)
+{ 
+    f64 Result = A.X*B.X + A.Y*B.Y + A.Z*B.Z + A.W*B.W;
+    return Result;
+}
+
+//==================================
+// 2x2 Matrix
+//==================================
+
+f64 Determinant(m22 M)
+{
+    f64 Result = M.E[0][0]*M.E[1][1] - M.E[0][1]*M.E[1][0];
+    return Result;
+}
+
+m22
+Adjugate(m22 M)
+{
+    m22 Result = M22(M.E[1][1], -M.E[1][0],
+                     -M.E[0][1], M.E[0][0]);
+    return Result;
+}
+
+m22
+Inverse(m22 M)
+{
+    f64 Det = Determinant(M);
+    m22 Adj = Adjugate(M);
+    m22 Result = (1.0 / Det) * Adj;
+    return Result;
+}
+
+m22
+Transpose(m22 M)
+{
+    m22 Result = M22(M.E[0][0], M.E[1][0],
+                     M.E[0][1], M.E[1][1]);
+    return Result;
+}
+
+m22
+M22Identity(void)
+{
+    m22 Result = M22(1, 0,
+                     0, 1);
+    return Result;
+}
+//==================================
+// 3x3 Matrix
+//==================================
+
+f64
+Determinant(m33 M)
+{
+    f64 a = M.E[0][0], b = M.E[0][1], c = M.E[0][2];
+    m22 efhi = M22(V2(M.E[1][1], M.E[1][2]), V2(M.E[2][1], M.E[2][2]));
+    m22 dfgi = M22(V2(M.E[1][0], M.E[1][2]), V2(M.E[2][0], M.E[2][2]));
+    m22 degh = M22(V2(M.E[1][0], M.E[1][1]), V2(M.E[2][0], M.E[2][1]));
+    
+    f64 Result = a*Determinant(efhi) - b*Determinant(dfgi) + c*Determinant(degh);
+    return Result;
+}
+
+m33
+Adjugate(m33 M)
+{
+    // First row
+    f64 a = Determinant(M22(V2(M.E[1][1], M.E[1][2]),
+                            V2(M.E[2][1], M.E[2][2])));
+    f64 b = Determinant(M22(V2(M.E[1][0], M.E[1][2]),
+                            V2(M.E[2][0], M.E[2][2])));
+    f64 c = Determinant(M22(V2(M.E[1][0], M.E[1][1]),
+                            V2(M.E[2][0], M.E[2][1])));
+    
+    // Second Row
+    f64 d = Determinant(M22(V2(M.E[0][1], M.E[0][2]),
+                            V2(M.E[2][1], M.E[2][2])));
+    f64 e = Determinant(M22(V2(M.E[0][0], M.E[0][2]),
+                            V2(M.E[2][0], M.E[2][2])));
+    f64 f = Determinant(M22(V2(M.E[0][0], M.E[0][1]),
+                            V2(M.E[2][0], M.E[2][1])));
+    
+    // Third Row
+    f64 g = Determinant(M22(V2(M.E[0][1], M.E[0][2]),
+                            V2(M.E[1][1], M.E[1][2])));
+    f64 h = Determinant(M22(V2(M.E[0][0], M.E[0][2]),
+                            V2(M.E[1][0], M.E[1][2])));
+    f64 i = Determinant(M22(V2(M.E[0][0], M.E[0][1]),
+                            V2(M.E[1][0], M.E[1][1])));
+    
+    m33 Result = M33(V3(a, -b, c), V3(-d, e, -f), V3(g, -h, i));
+    return Result;
+}
+
+m33
+Inverse(m33 M)
+{
+    f64 Det = Determinant(M);
+    m33 Adj = Adjugate(M);
+    m33 Result = (1.0 / Det) * Adj;
+    return Result;
+}
+
+m33
+Transpose(m33 M)
+{
+    m33 Result = M33(M.E[0][0], M.E[1][0], M.E[2][0],
+                     M.E[0][1], M.E[1][1], M.E[2][1],
+                     M.E[0][2], M.E[1][2], M.E[2][2]);
+    return Result;
+}
+
+m33
+M33Identity(void)
+{
+    m33 Result = M33(1, 0, 0,
+                     0, 1, 0,
+                     0, 0, 1);
+    return Result;
+}
+
+m33
+M33Rotate(f64 Angle)
+{
+    m33 Result = M33Identity();
+    Result.E[0][0] = cos(Angle);
+    Result.E[0][1] = -sin(Angle);
+    Result.E[1][0] = sin(Angle);
+    Result.E[1][1] = cos(Angle);
+    return Result;
+}
+
+m33
+M33Scale(v2 V)
+{
+    m33 Result = M33Identity();
+    Result.E[0][0] = V.X;
+    Result.E[1][1] = V.Y;
+    return Result;
+}
+
+m33
+M33Translate(v2 V)
+{
+    m33 Result = M33Identity();
+    Result.E[0][2] = V.X;
+    Result.E[1][2] = V.Y;
+    return Result;
+}
+
+m33
+M33Shear(v2 V)
+{
+    m33 Result = M33Identity();
+    Result.E[0][1] = V.Y;
+    Result.E[1][0] = V.X;
+    return Result;
+}
+
+m33
+M33FlipX(void)
+{
+    m33 Result = M33Identity();
+    Result.E[0][0] = -1;
+    return Result;
+}
+
+m33
+M33FlipY(void)
+{
+    m33 Result = M33Identity();
+    Result.E[1][1] = -1;
+    return Result;
+}
+
+//==================================
+// 4x4 Matrix
+//==================================
+
+f64
+Determinant(m44 M)
+{
+    f64 a = M.E[0][0], b = M.E[0][1], c = M.E[0][2], d = M.E[0][3];
+    m33 fghjklnop = M33(V3(M.E[1][1], M.E[1][2], M.E[1][3]),
+                        V3(M.E[2][1], M.E[2][2], M.E[2][3]),
+                        V3(M.E[3][1], M.E[3][2], M.E[3][3]));
+    m33 eghiklmop = M33(V3(M.E[1][0], M.E[1][2], M.E[1][3]),
+                        V3(M.E[2][0], M.E[2][2], M.E[2][3]),
+                        V3(M.E[3][0], M.E[3][2], M.E[3][3]));
+    m33 efhijlmnp = M33(V3(M.E[1][0], M.E[1][1], M.E[1][3]),
+                        V3(M.E[2][0], M.E[2][1], M.E[2][3]),
+                        V3(M.E[3][0], M.E[3][1], M.E[3][3]));
+    m33 efgijkmno = M33(V3(M.E[1][0], M.E[1][1], M.E[1][2]),
+                        V3(M.E[2][0], M.E[2][1], M.E[2][2]),
+                        V3(M.E[3][0], M.E[3][1], M.E[3][2]));
+    
+    f64 Result = (a*Determinant(fghjklnop) - b*Determinant(eghiklmop)
+                  + c*Determinant(efhijlmnp) - d*Determinant(efgijkmno));
+    return Result;
+}
+
+m44
+Adjugate(m44 M)
+{
+    // First row
+    f64 a = Determinant(M33(V3(M.E[1][1], M.E[1][2], M.E[1][3]),
+                            V3(M.E[2][1], M.E[2][2], M.E[2][3]),
+                            V3(M.E[3][1], M.E[3][2], M.E[3][3])));
+    f64 b = Determinant(M33(V3(M.E[1][0], M.E[1][2], M.E[1][3]),
+                            V3(M.E[2][0], M.E[2][2], M.E[2][3]),
+                            V3(M.E[3][0], M.E[3][2], M.E[3][3])));
+    f64 c = Determinant(M33(V3(M.E[1][0], M.E[1][1], M.E[1][3]),
+                            V3(M.E[2][0], M.E[2][1], M.E[2][3]),
+                            V3(M.E[3][0], M.E[3][1], M.E[3][3])));
+    f64 d = Determinant(M33(V3(M.E[1][0], M.E[1][1], M.E[1][2]),
+                            V3(M.E[2][0], M.E[2][1], M.E[2][2]),
+                            V3(M.E[3][0], M.E[3][1], M.E[3][2])));
+    
+    // Second Row
+    f64 e = Determinant(M33(V3(M.E[0][1], M.E[0][2], M.E[0][3]),
+                            V3(M.E[2][1], M.E[2][2], M.E[2][3]),
+                            V3(M.E[3][1], M.E[3][2], M.E[3][3])));
+    f64 f = Determinant(M33(V3(M.E[0][0], M.E[0][2], M.E[0][3]),
+                            V3(M.E[2][0], M.E[2][2], M.E[2][3]),
+                            V3(M.E[3][0], M.E[3][2], M.E[3][3])));
+    f64 g = Determinant(M33(V3(M.E[0][0], M.E[0][1], M.E[0][3]),
+                            V3(M.E[2][0], M.E[2][1], M.E[2][3]),
+                            V3(M.E[3][0], M.E[3][1], M.E[3][3])));
+    f64 h = Determinant(M33(V3(M.E[0][0], M.E[0][1], M.E[0][2]),
+                            V3(M.E[2][0], M.E[2][1], M.E[2][2]),
+                            V3(M.E[3][0], M.E[3][1], M.E[3][2])));
+    
+    // Third Row
+    f64 i = Determinant(M33(V3(M.E[0][1], M.E[0][2], M.E[0][3]),
+                            V3(M.E[1][1], M.E[1][2], M.E[1][3]),
+                            V3(M.E[3][1], M.E[3][2], M.E[3][3])));
+    f64 j = Determinant(M33(V3(M.E[0][0], M.E[0][2], M.E[0][3]),
+                            V3(M.E[1][0], M.E[1][2], M.E[1][3]),
+                            V3(M.E[3][0], M.E[3][2], M.E[3][3])));
+    f64 k = Determinant(M33(V3(M.E[0][0], M.E[0][1], M.E[0][3]),
+                            V3(M.E[1][0], M.E[1][1], M.E[1][3]),
+                            V3(M.E[3][0], M.E[3][1], M.E[3][3])));
+    f64 l = Determinant(M33(V3(M.E[0][0], M.E[0][1], M.E[0][2]),
+                            V3(M.E[1][0], M.E[1][1], M.E[1][2]),
+                            V3(M.E[3][0], M.E[3][1], M.E[3][2])));
+    
+    // Fourth Row
+    f64 m = Determinant(M33(V3(M.E[0][1], M.E[0][2], M.E[0][3]),
+                            V3(M.E[1][1], M.E[1][2], M.E[1][3]),
+                            V3(M.E[2][1], M.E[2][2], M.E[2][3])));
+    f64 n = Determinant(M33(V3(M.E[0][0], M.E[0][2], M.E[0][3]),
+                            V3(M.E[1][0], M.E[1][2], M.E[1][3]),
+                            V3(M.E[2][0], M.E[2][2], M.E[2][3])));
+    f64 o = Determinant(M33(V3(M.E[0][0], M.E[0][1], M.E[0][3]),
+                            V3(M.E[1][0], M.E[1][1], M.E[1][3]),
+                            V3(M.E[2][0], M.E[2][1], M.E[2][3])));
+    f64 p = Determinant(M33(V3(M.E[0][0], M.E[0][1], M.E[0][2]),
+                            V3(M.E[1][0], M.E[1][1], M.E[1][2]),
+                            V3(M.E[2][0], M.E[2][1], M.E[2][2])));
+    
+    m44 Result = M44(V4(a, -b, c, -d), V4(-e, f, -g, h), V4(i, -j, k, -l), V4(-m, n, -o, p));
+    return Result;
+}
+
+m44
+Inverse(m44 M)
+{
+    f64 Det = Determinant(M);
+    m44 Adj = Adjugate(M);
+    m44 Result = (1.0 / Det) * Adj;
+    return Result;
+}
+
+m44
+Transpose(m44 M)
+{
+    m44 Result = M44(M.E[0][0], M.E[1][0], M.E[2][0], M.E[3][0],
+                     M.E[0][1], M.E[1][1], M.E[2][1], M.E[3][1],
+                     M.E[0][2], M.E[1][2], M.E[2][2], M.E[3][2],
+                     M.E[0][3], M.E[1][3], M.E[2][3], M.E[3][3]);
+    return Result;
+}
+
+m44
+M44Identity(void)
+{
+    m44 Result = M44(1, 0, 0, 0,
+                     0, 1, 0, 0,
+                     0, 0, 1, 0,
+                     0, 0, 0, 1);
+    return Result;
+}
+
+m44
+M44Rotate(f64 Angle, v3 RotationAxis)
+{
+    f64 Cos = cos(Angle); // Must be in radians.
+    f64 ICos = 1 - Cos;
+    f64 Sin = sin(Angle); // Must be in radians.
+    f64 X = RotationAxis.X, Y = RotationAxis.Y, Z = RotationAxis.Z;
+    
+    m44 Result = M44(Cos + X*X*ICos   , X*Y*ICos - Z*Sin , X*Z*ICos + Y*Sin , 0,
+                     Y*X*ICos + Z*Sin , Cos + Y*Y*ICos   , Y*Z*ICos - X*Sin , 0,
+                     Z*X*ICos - Y*Sin , Z*Y*ICos + X*Sin , Cos + Z*Z*ICos   , 0,
+                     0                , 0                , 0                , 1);
+    return Result;
+}
+
+m44
+M44Scale(v3 V)
+{
+    m44 Result = M44Identity();
+    Result.E[0][0] = V.X;
+    Result.E[1][1] = V.Y;
+    Result.E[2][2] = V.Z;
+    return Result;
+}
+
+m44
+M44Translate(v3 V)
+{
+    m44 Result = M44Identity();
+    Result.E[0][3] = V.X;
+    Result.E[1][3] = V.Y;
+    Result.E[2][3] = V.Z;
+    return Result;
+}
+
+m44
+M44FlipX(void)
+{
+    m44 Result = M44Identity();
+    Result.E[0][0] = -1;
+    return Result;
+}
+
+m44
+M44FlipY(void)
+{
+    m44 Result = M44Identity();
+    Result.E[1][1] = -1;
+    return Result;
+}
+
+m44
+M44FlipZ(void)
+{
+    m44 Result = M44Identity();
+    Result.E[2][2] = -1;
+    return Result;
+}
+
+
+//==================================
 // Circle
 //==================================
 

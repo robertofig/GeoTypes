@@ -524,6 +524,7 @@ OpenAndImportShp(void* ShpPathStr)
                 && ReadFromFile(DbfFile, &Dbf, DbfFileSize, 0))
             {
                 Result = ImportShp(Shp, Shx, Dbf);
+                Result.InternalAlloc = 1;
             }
         }
         
@@ -533,6 +534,19 @@ OpenAndImportShp(void* ShpPathStr)
     }
     
     return Result;
+}
+
+external void
+CloseShp(shapefile* Shape)
+{
+    if (Shape->InternalAlloc)
+    {
+        usz MemSize = Shape->ShpFileSize + Shape->ShxFileSize + Shape->DbfFileSize;
+        buffer Mem = Buffer(Shape->ShpFilePtr, 0, MemSize);
+        FreeMemory(&Mem);
+    }
+    buffer ShapeBuffer = Buffer(Shape, sizeof(shapefile), sizeof(shapefile));
+    ClearMemory(&ShapeBuffer);
 }
 
 internal shp_feature

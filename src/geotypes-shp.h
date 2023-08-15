@@ -103,6 +103,8 @@ struct shapefile
     i32 NumFeatures;
     i32 NumFields;
     i32 LastFeatIdx;
+    
+    b32 InternalAlloc;
 };
 
 struct shp_feature
@@ -171,12 +173,48 @@ external bool CreateField(shapefile* Shape, char* FieldName, u8 FieldLen, u8 Pre
 // Read data functions
 //=================================
 
-external shapefile   ImportShp(buffer Shp, buffer Shx, buffer Dbf);
-external shapefile   OpenAndImportShp(void* ShpFilePath); // ShpFilePath must be in the OS unicode encoding.
-external shp_feature GetFeature(shapefile* Shape, i32 TargetIdx); // Idx from 0..NumFeatures-1.
-external shp_part    GetGeometry(shp_feature Feat, i32 TargetIdx); // Idx from 0..NumParts-1.
-external shp_field   GetFieldByIdx(shp_feature Feat, i32 TargetIdx); // Idx from 0..NumFields.
-external shp_field   GetFieldByName(shp_feature Feat, char* TargetName); // Name must be zero-terminated.
+external shapefile ImportShp(buffer Shp, buffer Shx, buffer Dbf);
+
+/* Imports shapefile from previously opened [.shp], [.shx] and [.dbf] files. User is
+|  responsible for opening and reading those files into the memory buffers, and later
+ |  freeing up that memory. The buffers must not be touched until the user finishes
+|  using the shapefile, as the library reads directly from them.
+|--- Return: parsed shapefile object if successful, empty object if not. */
+
+external shapefile OpenAndImportShp(void* ShpFilePath);
+
+/* Opens and imports shapefile given the path for the [.shp] file. Unlike ImportShp(),
+|  memory for it is handled by the library, and user must call CloseShp() later to
+ |  free up resources. ShpFilePath must be in the OS unicode encoding, and the
+ |  corresponding [.shx] and [.dbf] files must also be present in the same folder.
+ |--- Return: parsed shapefile object if successful, empty object if not. */
+
+external void CloseShp(shapefile* Shape);
+
+/* Frees memory from shapefile object (if it was created with OpenAndImportShp()), and
+|  zeroes out its memory.
+ |--- Return: nothing. */
+
+external shp_feature GetFeature(shapefile* Shape, i32 TargetIdx);
+
+/* Gets the Nth feature from Shape. TargetIdx goes from 0 to (Shape->NumFeatures - 1).
+|--- Return: shp_feature object. */
+
+external shp_part GetGeometry(shp_feature Feat, i32 TargetIdx);
+
+/* Gets the Nth geometry part from Feat. TargetIdx goes from 0 to (Feat.NumParts - 1).
+|--- Return: shp_part object. */
+
+external shp_field GetFieldByIdx(shp_feature Feat, i32 TargetIdx);
+
+/* Gets the Nth field from Feat. TargetIdx goes from 0 to (Feat.NumFields - 1).
+|--- Return: shp_field object. */
+
+external shp_field GetFieldByName(shp_feature Feat, char* TargetName);
+
+/* Gets the field from Feat by its name. TargetName must be a zero-terminated ASCII string.
+|--- Return: shp_field object if found, empty object if name not found. */
+
 
 //=================================
 // Write data functions

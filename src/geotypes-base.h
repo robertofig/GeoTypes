@@ -23,18 +23,7 @@ struct v2
 };
 
 inline v2 V2(f64 X, f64 Y) { v2 Result = { X, Y }; return Result; }
-
-inline v2   operator+(v2 A, v2 B) { return V2(A.X+B.X, A.Y+B.Y); }
-inline v2&  operator+=(v2& A, v2 B) { A = A + B; return A; }
-inline v2   operator-(v2 A, v2 B) { return V2(A.X-B.X, A.Y-B.Y); }
-inline v2&  operator-=(v2& A, v2 B) { A = A - B; return A; }
-inline v2   operator*(v2 A, f64 Scalar) { return V2(A.X*Scalar, A.Y*Scalar); }
-inline v2   operator*(f64 Scalar, v2 A) { return A * Scalar; }
-inline v2&  operator*=(v2& A, f64 Scalar) { A = A * Scalar; return A; }
-inline v2   operator/(v2 A, f64 Scalar) { return V2(A.X/Scalar, A.Y/Scalar); }
-inline v2   operator/(f64 Scalar, v2 A) { return A / Scalar; }
-inline v2&  operator/=(v2& A, f64 Scalar) { A = A / Scalar; return A; }
-inline bool operator==(v2 A, v2 B) { return A.X == B.X && A.Y == B.Y; }
+#define INVALID_V2 V2(INF, INF)
 
 f64 Dist(v2 A, v2 B);  // Euclidean distance.
 f64 Dist2(v2 A, v2 B); // Euclidean distance squared (no sqrt).
@@ -46,7 +35,17 @@ v2  Rotate90CW(v2 A);  // Rotates 90 degrees Clockwise.
 v2  Rotate90CCW(v2 A); // Rotates 90 degrees Counter-Clockwise.
 v2  Unit(v2 A);        // Unit vector.
 
-#define INVALID_V2 V2(INF, INF)
+inline v2  operator+(v2 A, v2 B) { return V2(A.X+B.X, A.Y+B.Y); }
+inline v2& operator+=(v2& A, v2 B) { A = A + B; return A; }
+inline v2  operator-(v2 A, v2 B) { return V2(A.X-B.X, A.Y-B.Y); }
+inline v2& operator-=(v2& A, v2 B) { A = A - B; return A; }
+inline v2  operator*(v2 A, f64 Scalar) { return V2(A.X*Scalar, A.Y*Scalar); }
+inline v2  operator*(f64 Scalar, v2 A) { return A * Scalar; }
+inline v2& operator*=(v2& A, f64 Scalar) { A = A * Scalar; return A; }
+inline v2  operator/(v2 A, f64 Scalar) { return V2(A.X/Scalar, A.Y/Scalar); }
+inline v2  operator/(f64 Scalar, v2 A) { return A / Scalar; }
+inline v2& operator/=(v2& A, f64 Scalar) { A = A / Scalar; return A; }
+inline b32 operator==(v2 A, v2 B) { return A.X == B.X && A.Y == B.Y; }
 
 //==================================
 // 3D Vector
@@ -64,18 +63,7 @@ struct v3
 
 inline v3 V3(f64 X, f64 Y, f64 Z) { v3 Result = { X, Y, Z }; return Result; }
 inline v3 V3(v2 XY, f64 Z) { return V3(XY.X, XY.Y, Z); }
-
-inline v3   operator+(v3 A, v3 B) { return V3(A.X+B.X, A.Y+B.Y, A.Z+B.Z); }
-inline v3&  operator+=(v3& A, v3 B) { A = A + B; return A; }
-inline v3   operator-(v3 A, v3 B) { return V3(A.X-B.X, A.Y-B.Y, A.Z-B.Z); }
-inline v3&  operator-=(v3& A, v3 B) { A = A - B; return A; }
-inline v3   operator*(v3 A, f64 Scalar) { return V3(A.X*Scalar, A.Y*Scalar, A.Z*Scalar); }
-inline v3   operator*(f64 Scalar, v3 A) { return A * Scalar; }
-inline v3&  operator*=(v3& A, f64 Scalar) { A = A * Scalar; return A; }
-inline v3   operator/(v3 A, f64 Scalar) { return V3(A.X/Scalar, A.Y/Scalar, A.Z/Scalar); }
-inline v3   operator/(f64 Scalar, v3 A) { return A / Scalar; }
-inline v3&  operator/=(v3& A, f64 Scalar) { A = A / Scalar; return A; }
-inline bool operator==(v3 A, v3 B) { return A.X == B.X && A.Y == B.Y && A.Z == B.Z; }
+#define INVALID_V3 V3(INF, INF, INF)
 
 f64 Dist(v3 A, v3 B);       // 3D euclidean distance.
 f64 Dist2(v3 A, v3 B);      // 3D euclidean distance squared (no sqrt).
@@ -90,7 +78,17 @@ v3  Rotate90ZAxisCW(v3 A);  // Rotates 90 degrees around Z-axis Clockwise.
 v3  Rotate90ZAxisCCW(v3 A); // Rotates 90 degrees around Z-axis Counter-Clockwise.
 v3  Unit(v3 A);             // Unit vector.
 
-#define INVALID_V3 V3(INF, INF, INF)
+inline v3  operator+(v3 A, v3 B) { return V3(A.X+B.X, A.Y+B.Y, A.Z+B.Z); }
+inline v3& operator+=(v3& A, v3 B) { A = A + B; return A; }
+inline v3  operator-(v3 A, v3 B) { return V3(A.X-B.X, A.Y-B.Y, A.Z-B.Z); }
+inline v3& operator-=(v3& A, v3 B) { A = A - B; return A; }
+inline v3  operator*(v3 A, f64 Scalar) { return V3(A.X*Scalar, A.Y*Scalar, A.Z*Scalar); }
+inline v3  operator*(f64 Scalar, v3 A) { return A * Scalar; }
+inline v3& operator*=(v3& A, f64 Scalar) { A = A * Scalar; return A; }
+inline v3  operator/(v3 A, f64 Scalar) { return V3(A.X/Scalar, A.Y/Scalar, A.Z/Scalar); }
+inline v3  operator/(f64 Scalar, v3 A) { return A / Scalar; }
+inline v3& operator/=(v3& A, f64 Scalar) { A = A / Scalar; return A; }
+inline b32 operator==(v3 A, v3 B) { return A.X == B.X && A.Y == B.Y && A.Z == B.Z; }
 
 //==================================
 // 4D Vector
@@ -108,26 +106,167 @@ struct v4
         };
         struct { f64 X, Y, _Padding; };
     };
-    f64 M;
+    union { f64 M, W; };
 };
 
 inline v4 V4(f64 X, f64 Y, f64 Z, f64 M) { v4 Result = { X, Y, Z, M }; return Result; }
 inline v4 V4(v2 XY, f64 Z, f64 M) { return V4(XY.X, XY.Y, Z, M); }
 inline v4 V4(v3 XYZ, f64 M) { return V4(XYZ.X, XYZ.Y, XYZ.Z, M); }
-
-inline v4   operator+(v4 A, v4 B) { return V4(A.X+B.X, A.Y+B.Y, A.Z+B.Z, A.M+B.M); }
-inline v4&  operator+=(v4& A, v4 B) { A = A + B; return A; }
-inline v4   operator-(v4 A, v4 B) { return V4(A.X-B.X, A.Y-B.Y, A.Z-B.Z, A.M-B.M); }
-inline v4&  operator-=(v4& A, v4 B) { A = A - B; return A; }
-inline v4   operator*(v4 A, f64 Scalar) { return V4(A.X*Scalar, A.Y*Scalar, A.Z*Scalar, A.M*Scalar); }
-inline v4   operator*(f64 Scalar, v4 A) { return A * Scalar; }
-inline v4&  operator*=(v4& A, f64 Scalar) { A = A * Scalar; return A; }
-inline v4   operator/(v4 A, f64 Scalar) { return V4(A.X/Scalar, A.Y/Scalar, A.Z/Scalar, A.M/Scalar); }
-inline v4   operator/(f64 Scalar, v4 A) { return A / Scalar; }
-inline v4&  operator/=(v4& A, f64 Scalar) { A = A / Scalar; return A; }
-inline bool operator==(v4 A, v4 B) { return A.X == B.X && A.Y == B.Y && A.Z == B.Z && A.M == B.M; }
-
 #define INVALID_V4 V4(INF, INF, INF, INF)
+
+f64 Dot(v4 A, v4 B); // Dot product.
+
+inline v4  operator+(v4 A, v4 B) { return V4(A.X+B.X, A.Y+B.Y, A.Z+B.Z, A.M+B.M); }
+inline v4& operator+=(v4& A, v4 B) { A = A + B; return A; }
+inline v4  operator-(v4 A, v4 B) { return V4(A.X-B.X, A.Y-B.Y, A.Z-B.Z, A.M-B.M); }
+inline v4& operator-=(v4& A, v4 B) { A = A - B; return A; }
+inline v4  operator*(v4 A, f64 Scalar) { return V4(A.X*Scalar, A.Y*Scalar, A.Z*Scalar, A.M*Scalar); }
+inline v4  operator*(f64 Scalar, v4 A) { return A * Scalar; }
+inline v4& operator*=(v4& A, f64 Scalar) { A = A * Scalar; return A; }
+inline v4  operator/(v4 A, f64 Scalar) { return V4(A.X/Scalar, A.Y/Scalar, A.Z/Scalar, A.M/Scalar); }
+inline v4  operator/(f64 Scalar, v4 A) { return A / Scalar; }
+inline v4& operator/=(v4& A, f64 Scalar) { A = A / Scalar; return A; }
+inline b32 operator==(v4 A, v4 B) { return A.X == B.X && A.Y == B.Y && A.Z == B.Z && A.M == B.M; }
+
+//==================================
+// 2x2 Matrix
+//==================================
+
+struct m22
+{
+    union
+    {
+        struct v2 V[2];
+        f64 E[2][2];
+    };
+};
+
+inline m22 M22(v2 Row0, v2 Row1) { return { Row0, Row1 }; }
+inline m22 M22(f64 a, f64 b, f64 c, f64 d) { return M22(V2(a, b), V2(c, d)); }
+#define INVALID_M22 M22(INVALID_V2, INVALID_V2)
+
+f64 Determinant(m22 M);
+m22 Adjugate(m22 M);
+m22 Inverse(m22 M);
+m22 Transpose(m22 M);
+
+m22 M22Identity(void);
+
+inline m22  operator+(m22 A, m22 B) { return M22(A.V[0]+B.V[0], A.V[1]+B.V[1]); }
+inline m22& operator+=(m22& A, m22 B) { A = A + B; return A; }
+inline m22  operator-(m22 A, m22 B) { return M22(A.V[0]-B.V[0], A.V[1]-B.V[1]); }
+inline m22& operator-=(m22& A, m22 B) { A = A - B; return A; }
+inline m22  operator*(m22 M, f64 Scalar) { return M22(M.V[0]*Scalar, M.V[1]*Scalar); }
+inline m22  operator*(f64 Scalar, m22 M) { return M * Scalar; }
+inline m22& operator*=(m22& M, f64 Scalar) { M = M * Scalar; return M; }
+inline v2   operator*(m22 M, v2 V) { return V2(Dot(V, M.V[0]), Dot(V, M.V[1])); }
+inline v2   operator*(v2 V, m22 M) { return M * V; }
+inline v2&  operator*=(v2& V, m22 M) { V = V * M; return V; }
+inline m22  operator*(m22 A, m22 B) { B = Transpose(B); return M22(B*A.V[0], B*A.V[1]); }
+inline m22& operator*=(m22& A, m22 B) { A = A * B; return A; }
+inline b32  operator==(m22 A, m22 B) { return A.V[0] == B.V[0] && A.V[1] == B.V[1]; }
+
+//==================================
+// 3x3 Matrix
+//==================================
+
+struct m33
+{
+    union
+    {
+        struct v3 V[3];
+        f64 E[3][3];
+    };
+};
+
+inline m33 M33(v3 Row0, v3 Row1, v3 Row2) { return { Row0, Row1, Row2 }; }
+inline m33 M33(f64 a, f64 b, f64 c, f64 d, f64 e, f64 f, f64 g, f64 h, f64 i)
+{ return M33(V3(a, b, c), V3(d, e, f), V3(g, h, i)); }
+#define INVALID_M33 M33(INVALID_V3, INVALID_V3, INVALID_V3)
+
+f64 Determinant(m33 M);
+m33 Adjugate(m33 M);
+m33 Inverse(m33 M);
+m33 Transpose(m33 M);
+
+m33 M33Identity(void);
+m33 M33Rotate(f64 Angle);
+m33 M33Scale(v2 V);
+m33 M33Translate(v2 V);
+m33 M33Shear(v2 V);
+m33 M33FlipX(void);
+m33 M33FlipY(void);
+
+inline m33  operator+(m33 A, m33 B) { return M33(A.V[0]+B.V[0], A.V[1]+B.V[1], A.V[2]+B.V[2]); }
+inline m33& operator+=(m33& A, m33 B) { A = A + B; return A; }
+inline m33  operator-(m33 A, m33 B) { return M33(A.V[0]-B.V[0], A.V[1]-B.V[1], A.V[2]-B.V[2]); }
+inline m33& operator-=(m33& A, m33 B) { A = A - B; return A; }
+inline m33  operator*(m33 M, f64 Scalar) { return M33(M.V[0]*Scalar, M.V[1]*Scalar, M.V[2]*Scalar); }
+inline m33  operator*(f64 Scalar, m33 M) { return M * Scalar; }
+inline m33& operator*=(m33& M, f64 Scalar) { M = M * Scalar; return M; }
+inline v3   operator*(m33 M, v3 V) { return V3(Dot(V, M.V[0]), Dot(V, M.V[1]), Dot(V, M.V[2])); }
+inline v3   operator*(v3 V, m33 M) { return M * V; }
+inline v3&  operator*=(v3 V, m33 M) { V = V * M; return V; }
+inline v2   operator*(m33 M, v2 V) { return (M * V3(V.X, V.Y, 1.0)).XY; }
+inline v2   operator*(v2 V, m33 M) { return M * V; }
+inline v2&  operator*=(v2 V, m33 M) { V = V * M; return V; }
+inline m33  operator*(m33 A, m33 B){ B = Transpose(B); return M33(B*A.V[0], B*A.V[1], B*A.V[2]); }
+inline m33& operator*=(m33& A, m33 B) { A = A * B; return A; }
+inline b32  operator==(m33 A, m33 B) { return A.V[0]==B.V[0] && A.V[1]==B.V[1] && A.V[2]==B.V[2]; }
+
+//==================================
+// 4x4 Matrix
+//==================================
+
+struct m44
+{
+    union
+    {
+        struct v4 V[4];
+        f64 E[4][4];
+    };
+};
+
+inline m44 M44(v4 Row0, v4 Row1, v4 Row2, v4 Row3) { return { Row0, Row1, Row2, Row3 }; }
+inline m44 M44(f64 a, f64 b, f64 c, f64 d, f64 e, f64 f, f64 g, f64 h,
+               f64 i, f64 j, f64 k, f64 l, f64 m, f64 n, f64 o, f64 p)
+{ return M44(V4(a, b, c, d), V4(e, f, g, h), V4(i, j, k, l), V4(m, n, o, p)); }
+#define INVALID_M44 M44(INVALID_V4, INVALID_V4, INVALID_V4, INVALID_V4)
+
+f64 Determinant(m44 M);
+m44 Adjugate(m44 M);
+m44 Inverse(m44 M);
+m44 Transpose(m44 M);
+
+m44 M44Identity(void);
+m44 M44Rotate(f64 Angle, v3 RotationAxis);
+m44 M44Scale(v3 V);
+m44 M44Translate(v3 V);
+m44 M44FlipX(void);
+m44 M44FlipY(void);
+m44 M44FlipZ(void);
+
+inline m44  operator+(m44 A, m44 B)
+{ return M44(A.V[0]+B.V[0], A.V[1]+B.V[1], A.V[2]+B.V[2], A.V[3]+B.V[3]); }
+inline m44& operator+=(m44& A, m44 B) { A = A + B; return A; }
+inline m44  operator-(m44 A, m44 B)
+{ return M44(A.V[0]-B.V[0], A.V[1]-B.V[1], A.V[2]-B.V[2], A.V[3]-B.V[3]); }
+inline m44& operator-=(m44& A, m44 B) { A = A - B; return A; }
+inline m44  operator*(m44 M, f64 Scalar)
+{ return M44(M.V[0]*Scalar, M.V[1]*Scalar, M.V[2]*Scalar, M.V[3]*Scalar); }
+inline m44  operator*(f64 Scalar, m44 M) { return M * Scalar; }
+inline m44& operator*=(m44& M, f64 Scalar) { M = M * Scalar; return M; }
+inline v4  operator*(m44 M, v4 V)
+{ return V4(Dot(V, M.V[0]), Dot(V, M.V[1]), Dot(V, M.V[2]), Dot(V, M.V[3])); }
+inline v4  operator*(v4 V, m44 M) { return M * V; }
+inline v4& operator*=(v4 V, m44 M) { V = V * M; return V; }
+inline v3   operator*(m44 M, v3 V) { return (M * V4(V.X, V.Y, V.Z, 1.0)).XYZ; }
+inline v3   operator*(v3 V, m44 M) { return M * V; }
+inline v3&  operator*=(v3 V, m44 M) { V = V * M; return V; }
+inline m44  operator*(m44 A, m44 B) { return M44(B*A.V[0], B*A.V[1], B*A.V[2], B*A.V[3]); }
+inline m44& operator*=(m44& A, m44 B) { A = A * B; return A; }
+inline b32 operator==(m44 A, m44 B)
+{ return A.V[0] == B.V[0] && A.V[1] == B.V[1] && A.V[2] == B.V[2] && A.V[3] == B.V[3]; }
 
 //==================================
 // Circle
