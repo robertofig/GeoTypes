@@ -136,9 +136,11 @@ struct m22
 {
     union
     {
-        struct v2 V[2];
+        v2 V[2];
         f64 E[2][2];
     };
+    
+    f64* operator[](int Idx) const { return (f64*)&E[Idx]; }
 };
 
 inline m22 M22(v2 Row0, v2 Row1) { return { Row0, Row1 }; }
@@ -177,6 +179,8 @@ struct m33
         struct v3 V[3];
         f64 E[3][3];
     };
+    
+    f64* operator[](int Idx) const { return (f64*)&E[Idx]; }
 };
 
 inline m33 M33(v3 Row0, v3 Row1, v3 Row2) { return { Row0, Row1, Row2 }; }
@@ -225,6 +229,8 @@ struct m44
         struct v4 V[4];
         f64 E[4][4];
     };
+    
+    f64* operator[](int Idx) const { return (f64*)&E[Idx]; }
 };
 
 inline m44 M44(v4 Row0, v4 Row1, v4 Row2, v4 Row3) { return { Row0, Row1, Row2, Row3 }; }
