@@ -191,9 +191,9 @@ m33 Transpose(m33 M);
 
 m33 M33Identity(void);
 m33 M33Rotate(f64 Angle);
-m33 M33Scale(v2 V);
-m33 M33Translate(v2 V);
-m33 M33Shear(v2 V);
+m33 M33Scale(v2 ScaleVector);
+m33 M33Translate(v2 TranslationVector);
+m33 M33Shear(v2 ShearVector);
 m33 M33FlipX(void);
 m33 M33FlipY(void);
 
@@ -240,8 +240,8 @@ m44 Transpose(m44 M);
 
 m44 M44Identity(void);
 m44 M44Rotate(f64 Angle, v3 RotationAxis);
-m44 M44Scale(v3 V);
-m44 M44Translate(v3 V);
+m44 M44Scale(v3 ScaleVector);
+m44 M44Translate(v3 TranslationVector);
 m44 M44FlipX(void);
 m44 M44FlipY(void);
 m44 M44FlipZ(void);
@@ -263,7 +263,8 @@ inline v4& operator*=(v4 V, m44 M) { V = V * M; return V; }
 inline v3   operator*(m44 M, v3 V) { return (M * V4(V.X, V.Y, V.Z, 1.0)).XYZ; }
 inline v3   operator*(v3 V, m44 M) { return M * V; }
 inline v3&  operator*=(v3 V, m44 M) { V = V * M; return V; }
-inline m44  operator*(m44 A, m44 B) { return M44(B*A.V[0], B*A.V[1], B*A.V[2], B*A.V[3]); }
+inline m44  operator*(m44 A, m44 B)
+{ B = Transpose(B); return M44(B*A.V[0], B*A.V[1], B*A.V[2], B*A.V[3]); }
 inline m44& operator*=(m44& A, m44 B) { A = A * B; return A; }
 inline b32 operator==(m44 A, m44 B)
 { return A.V[0] == B.V[0] && A.V[1] == B.V[1] && A.V[2] == B.V[2] && A.V[3] == B.V[3]; }
