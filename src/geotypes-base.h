@@ -12,6 +12,8 @@
 
 #define PI  3.141592653589793
 #define TAU 6.283185307179586
+#define RADIAN(A) (A * 0.017453292519943295)
+#define DEGREE(A) (A * 57.29577951308232)
 
 //==================================
 // 2D Vector
@@ -25,15 +27,16 @@ struct v2
 inline v2 V2(f64 X, f64 Y) { v2 Result = { X, Y }; return Result; }
 #define INVALID_V2 V2(INF, INF)
 
-f64 Dist(v2 A, v2 B);  // Euclidean distance.
-f64 Dist2(v2 A, v2 B); // Euclidean distance squared (no sqrt).
-f64 Dot(v2 A, v2 B);   // Dot product.
-f64 Cross(v2 A, v2 B); // Cross product of [A] over [B].
-f64 Mag(v2 A);         // Magnitude.
-f64 Mag2(v2 A);        // Magnitude squared (no sqrt).
-v2  Rotate90CW(v2 A);  // Rotates 90 degrees Clockwise.
-v2  Rotate90CCW(v2 A); // Rotates 90 degrees Counter-Clockwise.
-v2  Unit(v2 A);        // Unit vector.
+f64 Cross(v2 A, v2 B);       // Cross product of [A] over [B].
+f64 Dist(v2 A, v2 B);        // Euclidean distance.
+f64 Dist2(v2 A, v2 B);       // Euclidean distance squared (no sqrt).
+f64 Dot(v2 A, v2 B);         // Dot product.
+v3  Lerp(v3 A, f64 t, v3 B); // Linear interpolation between [A] and [B] at [t] percent.
+f64 Mag(v2 A);               // Magnitude.
+f64 Mag2(v2 A);              // Magnitude squared (no sqrt).
+v2  Rotate90CW(v2 A);        // Rotates 90 degrees Clockwise.
+v2  Rotate90CCW(v2 A);       // Rotates 90 degrees Counter-Clockwise.
+v2  Unit(v2 A);              // Unit vector.
 
 inline v2  operator+(v2 A, v2 B) { return V2(A.X+B.X, A.Y+B.Y); }
 inline v2& operator+=(v2& A, v2 B) { A = A + B; return A; }
@@ -65,18 +68,20 @@ inline v3 V3(f64 X, f64 Y, f64 Z) { v3 Result = { X, Y, Z }; return Result; }
 inline v3 V3(v2 XY, f64 Z) { return V3(XY.X, XY.Y, Z); }
 #define INVALID_V3 V3(INF, INF, INF)
 
-f64 Dist(v3 A, v3 B);       // 3D euclidean distance.
-f64 Dist2(v3 A, v3 B);      // 3D euclidean distance squared (no sqrt).
-f64 Dot(v3 A, v3 B);        // Dot product.
-f64 Mag(v3 A);              // Magnitude.
-f64 Mag2(v3 A);             // Magnitude squared (no sqrt).
-v3  Rotate90XAxisCW(v3 A);  // Rotates 90 degrees around X-axis Clockwise.
-v3  Rotate90XAxisCCW(v3 A); // Rotates 90 degrees around X-axis Counter-Clockwise.
-v3  Rotate90YAxisCW(v3 A);  // Rotates 90 degrees around Y-axis Clockwise.
-v3  Rotate90YAxisCCW(v3 A); // Rotates 90 degrees around Y-axis Counter-Clockwise.
-v3  Rotate90ZAxisCW(v3 A);  // Rotates 90 degrees around Z-axis Clockwise.
-v3  Rotate90ZAxisCCW(v3 A); // Rotates 90 degrees around Z-axis Counter-Clockwise.
-v3  Unit(v3 A);             // Unit vector.
+v3  Cross(v3 A, v3 B);       // Cross product of [A] over [B].
+f64 Dist(v3 A, v3 B);        // 3D euclidean distance.
+f64 Dist2(v3 A, v3 B);       // 3D euclidean distance squared (no sqrt).
+f64 Dot(v3 A, v3 B);         // Dot product.
+v3  Lerp(v3 A, f64 t, v3 B); // Linear interpolation between [A] and [B] at [t] percent.
+f64 Mag(v3 A);               // Magnitude.
+f64 Mag2(v3 A);              // Magnitude squared (no sqrt).
+v3  Rotate90XAxisCW(v3 A);   // Rotates 90 degrees around X-axis Clockwise.
+v3  Rotate90XAxisCCW(v3 A);  // Rotates 90 degrees around X-axis Counter-Clockwise.
+v3  Rotate90YAxisCW(v3 A);   // Rotates 90 degrees around Y-axis Clockwise.
+v3  Rotate90YAxisCCW(v3 A);  // Rotates 90 degrees around Y-axis Counter-Clockwise.
+v3  Rotate90ZAxisCW(v3 A);   // Rotates 90 degrees around Z-axis Clockwise.
+v3  Rotate90ZAxisCCW(v3 A);  // Rotates 90 degrees around Z-axis Counter-Clockwise.
+v3  Unit(v3 A);              // Unit vector.
 
 inline v3  operator+(v3 A, v3 B) { return V3(A.X+B.X, A.Y+B.Y, A.Z+B.Z); }
 inline v3& operator+=(v3& A, v3 B) { A = A + B; return A; }
@@ -114,7 +119,9 @@ inline v4 V4(v2 XY, f64 Z, f64 M) { return V4(XY.X, XY.Y, Z, M); }
 inline v4 V4(v3 XYZ, f64 M) { return V4(XYZ.X, XYZ.Y, XYZ.Z, M); }
 #define INVALID_V4 V4(INF, INF, INF, INF)
 
-f64 Dot(v4 A, v4 B); // Dot product.
+v4  Cross(v4 A, v4 B);       // Cross product of [A] over [B].
+f64 Dot(v4 A, v4 B);         // Dot product.
+v4  Lerp(v4 A, f64 t, v4 B); // Linear interpolation between [A] and [B] at [t] percent.
 
 inline v4  operator+(v4 A, v4 B) { return V4(A.X+B.X, A.Y+B.Y, A.Z+B.Z, A.M+B.M); }
 inline v4& operator+=(v4& A, v4 B) { A = A + B; return A; }
@@ -246,6 +253,9 @@ m44 Transpose(m44 M);
 
 m44 M44Identity(void);
 m44 M44Rotate(f64 Angle, v3 RotationAxis);
+m44 M44RotateX(f64 Angle);
+m44 M44RotateY(f64 Angle);
+m44 M44RotateZ(f64 Angle);
 m44 M44Scale(v3 ScaleVector);
 m44 M44Translate(v3 TranslationVector);
 m44 M44FlipX(void);
@@ -262,17 +272,17 @@ inline m44  operator*(m44 M, f64 Scalar)
 { return M44(M.V[0]*Scalar, M.V[1]*Scalar, M.V[2]*Scalar, M.V[3]*Scalar); }
 inline m44  operator*(f64 Scalar, m44 M) { return M * Scalar; }
 inline m44& operator*=(m44& M, f64 Scalar) { M = M * Scalar; return M; }
-inline v4  operator*(m44 M, v4 V)
+inline v4   operator*(m44 M, v4 V)
 { return V4(Dot(V, M.V[0]), Dot(V, M.V[1]), Dot(V, M.V[2]), Dot(V, M.V[3])); }
-inline v4  operator*(v4 V, m44 M) { return M * V; }
-inline v4& operator*=(v4 V, m44 M) { V = V * M; return V; }
+inline v4   operator*(v4 V, m44 M) { return M * V; }
+inline v4&  operator*=(v4 V, m44 M) { V = V * M; return V; }
 inline v3   operator*(m44 M, v3 V) { return (M * V4(V.X, V.Y, V.Z, 1.0)).XYZ; }
 inline v3   operator*(v3 V, m44 M) { return M * V; }
 inline v3&  operator*=(v3 V, m44 M) { V = V * M; return V; }
 inline m44  operator*(m44 A, m44 B)
 { B = Transpose(B); return M44(B*A.V[0], B*A.V[1], B*A.V[2], B*A.V[3]); }
 inline m44& operator*=(m44& A, m44 B) { A = A * B; return A; }
-inline b32 operator==(m44 A, m44 B)
+inline b32  operator==(m44 A, m44 B)
 { return A.V[0] == B.V[0] && A.V[1] == B.V[1] && A.V[2] == B.V[2] && A.V[3] == B.V[3]; }
 
 //==================================
