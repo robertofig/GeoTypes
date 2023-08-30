@@ -25,7 +25,7 @@ struct v2
 };
 
 inline v2 V2(f64 X, f64 Y) { v2 Result = { X, Y }; return Result; }
-#define INVALID_V2 V2(INF, INF)
+#define INVALID_V2 V2(INF64, INF64)
 
 f64 Cross(v2 A, v2 B);       // Cross product of [A] over [B].
 f64 Dist(v2 A, v2 B);        // Euclidean distance.
@@ -66,7 +66,7 @@ struct v3
 
 inline v3 V3(f64 X, f64 Y, f64 Z) { v3 Result = { X, Y, Z }; return Result; }
 inline v3 V3(v2 XY, f64 Z) { return V3(XY.X, XY.Y, Z); }
-#define INVALID_V3 V3(INF, INF, INF)
+#define INVALID_V3 V3(INF64, INF64, INF64)
 
 v3  Cross(v3 A, v3 B);       // Cross product of [A] over [B].
 f64 Dist(v3 A, v3 B);        // 3D euclidean distance.
@@ -117,7 +117,7 @@ struct v4
 inline v4 V4(f64 X, f64 Y, f64 Z, f64 M) { v4 Result = { X, Y, Z, M }; return Result; }
 inline v4 V4(v2 XY, f64 Z, f64 M) { return V4(XY.X, XY.Y, Z, M); }
 inline v4 V4(v3 XYZ, f64 M) { return V4(XYZ.X, XYZ.Y, XYZ.Z, M); }
-#define INVALID_V4 V4(INF, INF, INF, INF)
+#define INVALID_V4 V4(INF64, INF64, INF64, INF64)
 
 v4  Cross(v4 A, v4 B);       // Cross product of [A] over [B].
 f64 Dot(v4 A, v4 B);         // Dot product.
