@@ -31,7 +31,7 @@ f64 Cross(v2 A, v2 B);       // Cross product of [A] over [B].
 f64 Dist(v2 A, v2 B);        // Euclidean distance.
 f64 Dist2(v2 A, v2 B);       // Euclidean distance squared (no sqrt).
 f64 Dot(v2 A, v2 B);         // Dot product.
-v3  Lerp(v3 A, f64 t, v3 B); // Linear interpolation between [A] and [B] at [t] percent.
+v2  Lerp(v2 A, f64 t, v2 B); // Linear interpolation between [A] and [B] at [t] percent.
 f64 Mag(v2 A);               // Magnitude.
 f64 Mag2(v2 A);              // Magnitude squared (no sqrt).
 v2  Rotate90CW(v2 A);        // Rotates 90 degrees Clockwise.

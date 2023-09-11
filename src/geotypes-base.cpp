@@ -189,10 +189,10 @@ Dot(v4 A, v4 B)
 }
 
 v4
-Cross(v4 A)
+Cross(v4 A, v4 B)
 {
     v4 Result = {0};
-    Result.XYZ = Cross(A.XYZ);
+    Result.XYZ = Cross(A.XYZ, B.XYZ);
     Result.M = A.M;
     return Result;
 }
@@ -325,10 +325,9 @@ M33Rotate(f64 Angle)
 {
     f64 C = Cos(Angle); // Must be in radians.
     f64 S = Sin(Angle); // Must be in radians.
-    )
-        m33 Result = M33(C, -S, 0,
-                         S,  C, 0,
-                         0,  0, 1);
+    m33 Result = M33(C, -S, 0,
+                     S,  C, 0,
+                     0,  0, 1);
     return Result;
 }
 
@@ -337,7 +336,7 @@ M33Scale(v2 V)
 {
     f64 X = V.X, Y = V.Y;
     m33 Result = M33(X, 0, 0,
-                     0, Y, 0
+                     0, Y, 0,
                      0, 0, 1);
     return Result;
 }
