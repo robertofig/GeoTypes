@@ -104,7 +104,7 @@ struct shapefile
     i32 NumFields;
     i32 LastFeatIdx;
     
-    b32 InternalAlloc;
+    bool InternalAlloc;
 };
 
 struct shp_feature

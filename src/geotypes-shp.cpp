@@ -502,12 +502,12 @@ OpenAndImportShp(void* ShpPathStr)
         usz ExtIdx = CharInString('.', AccompanyPath, RETURN_IDX_AFTER|SEARCH_REVERSE);
         
         AccompanyPath.WriteCur = ExtIdx;
-        AppendStringToString(StrLit("shx"), &AccompanyPath);
+        AppendStringToString(StringLit("shx"), &AccompanyPath);
         file ShxFile = OpenFileHandle(AccompanyFiles, READ_SHARE);
         usz ShxFileSize = FileSizeOf(ShxFile);
         
         AccompanyPath.WriteCur = ExtIdx;
-        AppendStringToString(StrLit("dbf"), &AccompanyPath);
+        AppendStringToString(StringLit("dbf"), &AccompanyPath);
         file DbfFile = OpenFileHandle(AccompanyFiles, READ_SHARE);
         usz DbfFileSize = FileSizeOf(DbfFile);
         

@@ -48,7 +48,7 @@ inline v2& operator*=(v2& A, f64 Scalar) { A = A * Scalar; return A; }
 inline v2  operator/(v2 A, f64 Scalar) { return V2(A.X/Scalar, A.Y/Scalar); }
 inline v2  operator/(f64 Scalar, v2 A) { return A / Scalar; }
 inline v2& operator/=(v2& A, f64 Scalar) { A = A / Scalar; return A; }
-inline b32 operator==(v2 A, v2 B) { return A.X == B.X && A.Y == B.Y; }
+inline bool operator==(v2 A, v2 B) { return A.X == B.X && A.Y == B.Y; }
 
 //==================================
 // 3D Vector
@@ -93,7 +93,7 @@ inline v3& operator*=(v3& A, f64 Scalar) { A = A * Scalar; return A; }
 inline v3  operator/(v3 A, f64 Scalar) { return V3(A.X/Scalar, A.Y/Scalar, A.Z/Scalar); }
 inline v3  operator/(f64 Scalar, v3 A) { return A / Scalar; }
 inline v3& operator/=(v3& A, f64 Scalar) { A = A / Scalar; return A; }
-inline b32 operator==(v3 A, v3 B) { return A.X == B.X && A.Y == B.Y && A.Z == B.Z; }
+inline bool operator==(v3 A, v3 B) { return A.X == B.X && A.Y == B.Y && A.Z == B.Z; }
 
 //==================================
 // 4D Vector
@@ -133,7 +133,7 @@ inline v4& operator*=(v4& A, f64 Scalar) { A = A * Scalar; return A; }
 inline v4  operator/(v4 A, f64 Scalar) { return V4(A.X/Scalar, A.Y/Scalar, A.Z/Scalar, A.M/Scalar); }
 inline v4  operator/(f64 Scalar, v4 A) { return A / Scalar; }
 inline v4& operator/=(v4& A, f64 Scalar) { A = A / Scalar; return A; }
-inline b32 operator==(v4 A, v4 B) { return A.X == B.X && A.Y == B.Y && A.Z == B.Z && A.M == B.M; }
+inline bool operator==(v4 A, v4 B) { return A.X == B.X && A.Y == B.Y && A.Z == B.Z && A.M == B.M; }
 
 //==================================
 // 2x2 Matrix
@@ -173,7 +173,7 @@ inline v2   operator*(v2 V, m22 M) { return M * V; }
 inline v2&  operator*=(v2& V, m22 M) { V = V * M; return V; }
 inline m22  operator*(m22 A, m22 B) { B = Transpose(B); return M22(B*A.V[0], B*A.V[1]); }
 inline m22& operator*=(m22& A, m22 B) { A = A * B; return A; }
-inline b32  operator==(m22 A, m22 B) { return A.V[0] == B.V[0] && A.V[1] == B.V[1]; }
+inline bool  operator==(m22 A, m22 B) { return A.V[0] == B.V[0] && A.V[1] == B.V[1]; }
 
 //==================================
 // 3x3 Matrix
@@ -223,7 +223,7 @@ inline v2   operator*(v2 V, m33 M) { return M * V; }
 inline v2&  operator*=(v2 V, m33 M) { V = V * M; return V; }
 inline m33  operator*(m33 A, m33 B){ B = Transpose(B); return M33(B*A.V[0], B*A.V[1], B*A.V[2]); }
 inline m33& operator*=(m33& A, m33 B) { A = A * B; return A; }
-inline b32  operator==(m33 A, m33 B) { return A.V[0]==B.V[0] && A.V[1]==B.V[1] && A.V[2]==B.V[2]; }
+inline bool  operator==(m33 A, m33 B) { return A.V[0]==B.V[0] && A.V[1]==B.V[1] && A.V[2]==B.V[2]; }
 
 //==================================
 // 4x4 Matrix
@@ -282,7 +282,7 @@ inline v3&  operator*=(v3 V, m44 M) { V = V * M; return V; }
 inline m44  operator*(m44 A, m44 B)
 { B = Transpose(B); return M44(B*A.V[0], B*A.V[1], B*A.V[2], B*A.V[3]); }
 inline m44& operator*=(m44& A, m44 B) { A = A * B; return A; }
-inline b32  operator==(m44 A, m44 B)
+inline bool  operator==(m44 A, m44 B)
 { return A.V[0] == B.V[0] && A.V[1] == B.V[1] && A.V[2] == B.V[2] && A.V[3] == B.V[3]; }
 
 //==================================
